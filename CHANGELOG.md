@@ -12,6 +12,8 @@
 - Server authoritative quick craft from the inventory and nearby storage.
 - Server settings in `$profile:JEI/settings.json`.
 - Admin tools: spawn items, create, edit, disable and delete recipes.
+- Item grid with 3D icons, tooltips, visual recipe view with cycling ingredients.
+- Sort by name, mod or class, mod filter, and a "Craftable" filter for what can be crafted now.
 
 ## Français
 
@@ -25,3 +27,5 @@
 - Craft rapide côté serveur depuis l'inventaire et les stockages proches.
 - Réglages serveur dans `$profile:JEI/settings.json`.
 - Outils admin : faire apparaître des objets, créer, modifier, désactiver et supprimer des recettes.
+- Grille d'icônes 3D, info-bulles, recette visuelle avec ingrédients qui défilent.
+- Tri par nom, mod ou classe, filtre par mod, et filtre "Craftable" pour ce qui est fabricable tout de suite.

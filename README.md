@@ -17,6 +17,10 @@ and the storage around you.
   recipes and recipes registered by any other mod are found without a compatibility patch.
 - **"How to craft" and "Used in"** views, base class ingredients included (a recipe asking for
   `Knife` lists every knife).
+- **Item grid with 3D icons**: left click shows how to craft an item, right click what it is used
+  in, the mouse wheel turns pages, hovering shows a tooltip.
+- **Sort and filter**: sort by name, mod or class, show one mod at a time, or press **Craftable**
+  to list only what can be crafted right now from the inventory and nearby storage.
 - **Search syntax**: plain text (name or class), `@mod` (items of one mod, e.g. `@dayz`),
   `=Class` (every item inheriting from a class).
 - **Quick craft from nearby storage**: ingredients are taken from the player inventory, loose
@@ -79,6 +83,10 @@ son inventaire et les stockages autour.
 - **Détection automatique des recettes** : JEI intercepte `PluginRecipesManager.RegisterRecipe`,
   donc les recettes vanilla et celles des autres mods sont trouvées sans patch de compatibilité.
 - **Vues "Comment fabriquer" et "Utilisé dans"**, y compris les ingrédients par classe parente.
+- **Grille d'icônes 3D** : clic gauche pour la fabrication, clic droit pour les utilisations,
+  molette pour les pages, info-bulle au survol.
+- **Tri et filtres** : tri par nom, mod ou classe, un mod à la fois, ou bouton **Craftable** pour
+  n'afficher que ce qui est fabricable tout de suite avec l'inventaire et les stockages proches.
 - **Recherche** : texte (nom ou classe), `@mod` (objets d'un mod, ex. `@dayz`), `=Classe`
   (tous les objets qui héritent d'une classe).
 - **Craft rapide depuis les stockages proches** : inventaire du joueur, objets au sol, conteneurs
