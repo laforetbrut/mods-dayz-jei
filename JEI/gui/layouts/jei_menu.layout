@@ -7,465 +7,1326 @@ FrameWidgetClass JEIRoot {
  vexactsize 0
  {
   PanelWidgetClass Dim {
-   ignorepointer 1
-   color 0 0 0 0.55
    position 0 0
    size 1 1
    hexactpos 0
    vexactpos 0
    hexactsize 0
    vexactsize 0
+   color 0 0 0 0.6
    style rover_sim_colorable
+   ignorepointer 1
   }
   PanelWidgetClass Main {
-   color 0.07 0.07 0.08 0.94
-   position 0.04 0.05
-   size 0.92 0.9
+   position 0.06 0.06
+   size 0.88 0.88
    hexactpos 0
    vexactpos 0
    hexactsize 0
    vexactsize 0
+   color 0.055 0.06 0.07 0.96
    style rover_sim_colorable
    {
     TextWidgetClass Title {
+     position 0.012 0.012
+     size 0.3 0.04
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
      ignorepointer 1
-     position 0.01 0.01
-     size 0.5 0.045
-     hexactpos 0
-     vexactpos 0
-     hexactsize 0
-     vexactsize 0
-     text "JEI - Just Enough Items"
-     font "gui/fonts/metron28"
+     color 0.86 0.55 0.18 1
+     text "JEI  Just Enough Items"
+     font "gui/fonts/metron"
+     "exact text" 1
+     "exact text size" 22
      text_valign center
+     text_halign left
     }
-    ButtonWidgetClass BtnClose {
-     position 0.958 0.01
-     size 0.032 0.045
+    PanelWidgetClass BtnClose {
+     position 0.965 0.012
+     size 0.025 0.04
      hexactpos 0
      vexactpos 0
      hexactsize 0
      vexactsize 0
-     style Default
-     text "X"
+     color 0.17 0.18 0.2 1
+     style rover_sim_colorable
+     {
+      TextWidgetClass BtnCloseText {
+       position 0 0
+       size 1 1
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       ignorepointer 1
+       color 0.92 0.92 0.92 1
+       text "X"
+       font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 16
+       text_valign center
+       text_halign center
+      }
+     }
     }
     EditBoxWidgetClass Search {
-     position 0.01 0.065
-     size 0.3 0.045
+     position 0.012 0.065
+     size 0.25 0.045
      hexactpos 0
      vexactpos 0
      hexactsize 0
      vexactsize 0
      style DefaultBorder
      font "gui/fonts/metron"
+     "exact text" 1
+     "exact text size" 16
     }
-    TextListboxWidgetClass ItemList {
-     position 0.01 0.12
-     size 0.3 0.82
+    PanelWidgetClass BtnSort {
+     position 0.268 0.065
+     size 0.105 0.045
      hexactpos 0
      vexactpos 0
      hexactsize 0
      vexactsize 0
+     color 0.17 0.18 0.2 1
+     style rover_sim_colorable
+     {
+      TextWidgetClass BtnSortText {
+       position 0 0
+       size 1 1
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       ignorepointer 1
+       color 0.92 0.92 0.92 1
+       text "Sort: name"
+       font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 13
+       text_valign center
+       text_halign center
+      }
+     }
+    }
+    PanelWidgetClass BtnModFilter {
+     position 0.378 0.065
+     size 0.104 0.045
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     color 0.17 0.18 0.2 1
+     style rover_sim_colorable
+     {
+      TextWidgetClass BtnModFilterText {
+       position 0 0
+       size 1 1
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       ignorepointer 1
+       color 0.92 0.92 0.92 1
+       text "All mods"
+       font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 13
+       text_valign center
+       text_halign center
+      }
+     }
+    }
+    TextWidgetClass SearchHint {
+     position 0.012 0.112
+     size 0.47 0.025
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     ignorepointer 1
+     color 0.6 0.62 0.66 1
+     text "name   @mod   =BaseClass        LMB recipe  -  RMB uses"
      font "gui/fonts/metron"
+     "exact text" 1
+     "exact text size" 12
+     text_valign center
+     text_halign left
+    }
+    PanelWidgetClass Grid {
+     position 0.012 0.14
+     size 0.47 0.76
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     color 0.1 0.105 0.12 1
+     style rover_sim_colorable
+    }
+    PanelWidgetClass BtnPrev {
+     position 0.012 0.91
+     size 0.05 0.045
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     color 0.17 0.18 0.2 1
+     style rover_sim_colorable
+     {
+      TextWidgetClass BtnPrevText {
+       position 0 0
+       size 1 1
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       ignorepointer 1
+       color 0.92 0.92 0.92 1
+       text "<"
+       font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 18
+       text_valign center
+       text_halign center
+      }
+     }
+    }
+    TextWidgetClass PageText {
+     position 0.065 0.91
+     size 0.12 0.045
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     ignorepointer 1
+     color 0.92 0.92 0.92 1
+     text "1 / 1"
+     font "gui/fonts/metron"
+     "exact text" 1
+     "exact text size" 15
+     text_valign center
+     text_halign center
+    }
+    PanelWidgetClass BtnNext {
+     position 0.188 0.91
+     size 0.05 0.045
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     color 0.17 0.18 0.2 1
+     style rover_sim_colorable
+     {
+      TextWidgetClass BtnNextText {
+       position 0 0
+       size 1 1
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       ignorepointer 1
+       color 0.92 0.92 0.92 1
+       text ">"
+       font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 18
+       text_valign center
+       text_halign center
+      }
+     }
     }
     TextWidgetClass ItemCount {
-     ignorepointer 1
-     position 0.01 0.948
-     size 0.3 0.04
+     position 0.25 0.91
+     size 0.232 0.045
      hexactpos 0
      vexactpos 0
      hexactsize 0
      vexactsize 0
+     ignorepointer 1
+     color 0.6 0.62 0.66 1
+     text ""
      font "gui/fonts/metron"
+     "exact text" 1
+     "exact text size" 13
      text_valign center
+     text_halign right
     }
-    ItemPreviewWidgetClass Preview {
-     ignorepointer 1
-     position 0.33 0.065
-     size 0.2 0.26
+    PanelWidgetClass PreviewBg {
+     position 0.5 0.065
+     size 0.13 0.2
      hexactpos 0
      vexactpos 0
      hexactsize 0
      vexactsize 0
+     color 0.1 0.105 0.12 1
+     style rover_sim_colorable
+     {
+      ItemPreviewWidgetClass Preview {
+       position 0.05 0.05
+       size 0.9 0.9
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       ignorepointer 1
+      }
+     }
     }
     TextWidgetClass ItemName {
-     ignorepointer 1
-     position 0.55 0.065
-     size 0.43 0.05
+     position 0.645 0.065
+     size 0.345 0.05
      hexactpos 0
      vexactpos 0
      hexactsize 0
      vexactsize 0
-     font "gui/fonts/metron28"
+     ignorepointer 1
+     color 0.92 0.92 0.92 1
+     text "Select an item"
+     font "gui/fonts/metron"
+     "exact text" 1
+     "exact text size" 22
      text_valign center
+     text_halign left
     }
-    MultilineTextWidgetClass ItemInfo {
+    TextWidgetClass ItemInfo {
+     position 0.645 0.115
+     size 0.345 0.035
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
      ignorepointer 1
-     position 0.55 0.12
-     size 0.43 0.12
-     hexactpos 0
-     vexactpos 0
-     hexactsize 0
-     vexactsize 0
+     color 0.6 0.62 0.66 1
+     text ""
      font "gui/fonts/metron"
+     "exact text" 1
+     "exact text size" 13
+     text_valign center
+     text_halign left
     }
-    ButtonWidgetClass BtnRecipes {
-     position 0.55 0.26
-     size 0.2 0.05
+    TextWidgetClass ItemInfo2 {
+     position 0.645 0.15
+     size 0.345 0.035
      hexactpos 0
      vexactpos 0
      hexactsize 0
      vexactsize 0
-     style Default
-     text "How to craft"
-    }
-    ButtonWidgetClass BtnUses {
-     position 0.76 0.26
-     size 0.2 0.05
-     hexactpos 0
-     vexactpos 0
-     hexactsize 0
-     vexactsize 0
-     style Default
-     text "Used in"
-    }
-    TextListboxWidgetClass RecipeList {
-     position 0.33 0.34
-     size 0.3 0.52
-     hexactpos 0
-     vexactpos 0
-     hexactsize 0
-     vexactsize 0
+     ignorepointer 1
+     color 0.6 0.62 0.66 1
+     text ""
      font "gui/fonts/metron"
+     "exact text" 1
+     "exact text size" 13
+     text_valign center
+     text_halign left
     }
-    TextListboxWidgetClass DetailList {
-     position 0.65 0.34
-     size 0.33 0.45
+    PanelWidgetClass BtnRecipes {
+     position 0.645 0.21
+     size 0.17 0.05
      hexactpos 0
      vexactpos 0
      hexactsize 0
      vexactsize 0
-     font "gui/fonts/metron"
+     color 0.17 0.18 0.2 1
+     style rover_sim_colorable
+     {
+      TextWidgetClass BtnRecipesText {
+       position 0 0
+       size 1 1
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       ignorepointer 1
+       color 0.92 0.92 0.92 1
+       text "How to craft"
+       font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 15
+       text_valign center
+       text_halign center
+      }
+     }
     }
-    ButtonWidgetClass BtnGoto {
-     position 0.65 0.8
-     size 0.105 0.05
+    PanelWidgetClass BtnUses {
+     position 0.82 0.21
+     size 0.17 0.05
      hexactpos 0
      vexactpos 0
      hexactsize 0
      vexactsize 0
-     style Default
-     text "Show item"
+     color 0.17 0.18 0.2 1
+     style rover_sim_colorable
+     {
+      TextWidgetClass BtnUsesText {
+       position 0 0
+       size 1 1
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       ignorepointer 1
+       color 0.92 0.92 0.92 1
+       text "Used in"
+       font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 15
+       text_valign center
+       text_halign center
+      }
+     }
     }
-    ButtonWidgetClass BtnCraft1 {
-     position 0.763 0.8
-     size 0.105 0.05
+    PanelWidgetClass RecipeCard {
+     position 0.5 0.28
+     size 0.49 0.43
      hexactpos 0
      vexactpos 0
      hexactsize 0
      vexactsize 0
-     style Default
-     text "Craft x1"
+     color 0.1 0.105 0.12 1
+     style rover_sim_colorable
+     {
+      TextWidgetClass RecipeTitle {
+       position 0.03 0.03
+       size 0.62 0.12
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       ignorepointer 1
+       color 0.86 0.55 0.18 1
+       text ""
+       font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 19
+       text_valign center
+       text_halign left
+      }
+      PanelWidgetClass BtnRecPrev {
+       position 0.68 0.035
+       size 0.08 0.11
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       color 0.17 0.18 0.2 1
+       style rover_sim_colorable
+       {
+        TextWidgetClass BtnRecPrevText {
+         position 0 0
+         size 1 1
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         ignorepointer 1
+         color 0.92 0.92 0.92 1
+         text "<"
+         font "gui/fonts/metron"
+         "exact text" 1
+         "exact text size" 18
+         text_valign center
+         text_halign center
+        }
+       }
+      }
+      TextWidgetClass RecPageText {
+       position 0.765 0.035
+       size 0.13 0.11
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       ignorepointer 1
+       color 0.92 0.92 0.92 1
+       text ""
+       font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 15
+       text_valign center
+       text_halign center
+      }
+      PanelWidgetClass BtnRecNext {
+       position 0.9 0.035
+       size 0.08 0.11
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       color 0.17 0.18 0.2 1
+       style rover_sim_colorable
+       {
+        TextWidgetClass BtnRecNextText {
+         position 0 0
+         size 1 1
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         ignorepointer 1
+         color 0.92 0.92 0.92 1
+         text ">"
+         font "gui/fonts/metron"
+         "exact text" 1
+         "exact text size" 18
+         text_valign center
+         text_halign center
+        }
+       }
+      }
+      TextWidgetClass RecipeTag {
+       position 0.03 0.15
+       size 0.94 0.08
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       ignorepointer 1
+       color 0.6 0.62 0.66 1
+       text ""
+       font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 13
+       text_valign center
+       text_halign left
+      }
+      FrameWidgetClass SlotA {
+       position 0.04 0.3
+       size 0.17 0.4
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+      }
+      TextWidgetClass PlusText {
+       position 0.21 0.3
+       size 0.06 0.4
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       ignorepointer 1
+       color 0.6 0.62 0.66 1
+       text "+"
+       font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 30
+       text_valign center
+       text_halign center
+      }
+      FrameWidgetClass SlotB {
+       position 0.27 0.3
+       size 0.17 0.4
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+      }
+      TextWidgetClass ArrowText {
+       position 0.45 0.3
+       size 0.08 0.4
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       ignorepointer 1
+       color 0.86 0.55 0.18 1
+       text ">"
+       font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 32
+       text_valign center
+       text_halign center
+      }
+      FrameWidgetClass SlotR0 {
+       position 0.54 0.3
+       size 0.14 0.33
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+      }
+      FrameWidgetClass SlotR1 {
+       position 0.69 0.3
+       size 0.14 0.33
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+      }
+      FrameWidgetClass SlotR2 {
+       position 0.84 0.3
+       size 0.14 0.33
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+      }
+      TextWidgetClass SlotAName {
+       position 0.0 0.72
+       size 0.25 0.1
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       ignorepointer 1
+       color 0.92 0.92 0.92 1
+       text ""
+       font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 13
+       text_valign center
+       text_halign center
+      }
+      TextWidgetClass SlotBName {
+       position 0.23 0.72
+       size 0.25 0.1
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       ignorepointer 1
+       color 0.92 0.92 0.92 1
+       text ""
+       font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 13
+       text_valign center
+       text_halign center
+      }
+      TextWidgetClass ResultName {
+       position 0.53 0.66
+       size 0.46 0.1
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       ignorepointer 1
+       color 0.92 0.92 0.92 1
+       text ""
+       font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 13
+       text_valign center
+       text_halign center
+      }
+      TextWidgetClass SlotAState {
+       position 0.0 0.82
+       size 0.25 0.08
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       ignorepointer 1
+       color 0.6 0.62 0.66 1
+       text ""
+       font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 12
+       text_valign center
+       text_halign center
+      }
+      TextWidgetClass SlotBState {
+       position 0.23 0.82
+       size 0.25 0.08
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       ignorepointer 1
+       color 0.6 0.62 0.66 1
+       text ""
+       font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 12
+       text_valign center
+       text_halign center
+      }
+      TextWidgetClass NoRecipe {
+       position 0.03 0.3
+       size 0.94 0.4
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       ignorepointer 1
+       color 0.6 0.62 0.66 1
+       text ""
+       font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 16
+       text_valign center
+       text_halign center
+      }
+     }
     }
-    ButtonWidgetClass BtnCraftMax {
-     position 0.876 0.8
-     size 0.104 0.05
+    PanelWidgetClass BtnCraft1 {
+     position 0.5 0.725
+     size 0.15 0.055
      hexactpos 0
      vexactpos 0
      hexactsize 0
      vexactsize 0
-     style Default
-     text "Craft x10"
+     color 0.2 0.42 0.24 1
+     style rover_sim_colorable
+     {
+      TextWidgetClass BtnCraft1Text {
+       position 0 0
+       size 1 1
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       ignorepointer 1
+       color 0.92 0.92 0.92 1
+       text "Craft x1"
+       font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 16
+       text_valign center
+       text_halign center
+      }
+     }
+    }
+    PanelWidgetClass BtnCraftMax {
+     position 0.655 0.725
+     size 0.15 0.055
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     color 0.2 0.42 0.24 1
+     style rover_sim_colorable
+     {
+      TextWidgetClass BtnCraftMaxText {
+       position 0 0
+       size 1 1
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       ignorepointer 1
+       color 0.92 0.92 0.92 1
+       text "Craft x10"
+       font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 16
+       text_valign center
+       text_halign center
+      }
+     }
     }
     TextWidgetClass Status {
-     ignorepointer 1
-     position 0.65 0.86
-     size 0.33 0.04
+     position 0.5 0.79
+     size 0.49 0.04
      hexactpos 0
      vexactpos 0
      hexactsize 0
      vexactsize 0
+     ignorepointer 1
+     color 0.6 0.62 0.66 1
+     text ""
      font "gui/fonts/metron"
+     "exact text" 1
+     "exact text size" 14
      text_valign center
+     text_halign left
     }
     FrameWidgetClass AdminPanel {
-     visible 0
-     position 0.33 0.88
-     size 0.65 0.06
+     position 0.5 0.85
+     size 0.49 0.105
      hexactpos 0
      vexactpos 0
      hexactsize 0
      vexactsize 0
+     visible 0
      {
       TextWidgetClass AdminLabel {
-       ignorepointer 1
-       position 0 0.1
-       size 0.1 0.8
+       position 0 0
+       size 1 0.35
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       color 0.94 0.47 0.47 1
+       ignorepointer 1
+       color 0.9 0.4 0.4 1
        text "ADMIN"
        font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 12
        text_valign center
+       text_halign left
       }
-      ButtonWidgetClass BtnGive1 {
-       position 0.1 0.1
-       size 0.16 0.8
+      PanelWidgetClass BtnGive1 {
+       position 0.0 0.42
+       size 0.15 0.55
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       style Default
-       text "Give x1"
+       color 0.17 0.18 0.2 1
+       style rover_sim_colorable
+       {
+        TextWidgetClass BtnGive1Text {
+         position 0 0
+         size 1 1
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         ignorepointer 1
+         color 0.92 0.92 0.92 1
+         text "Give x1"
+         font "gui/fonts/metron"
+         "exact text" 1
+         "exact text size" 14
+         text_valign center
+         text_halign center
+        }
+       }
       }
-      ButtonWidgetClass BtnGive10 {
-       position 0.27 0.1
-       size 0.16 0.8
+      PanelWidgetClass BtnGive10 {
+       position 0.16 0.42
+       size 0.15 0.55
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       style Default
-       text "Give x10"
+       color 0.17 0.18 0.2 1
+       style rover_sim_colorable
+       {
+        TextWidgetClass BtnGive10Text {
+         position 0 0
+         size 1 1
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         ignorepointer 1
+         color 0.92 0.92 0.92 1
+         text "Give x10"
+         font "gui/fonts/metron"
+         "exact text" 1
+         "exact text size" 14
+         text_valign center
+         text_halign center
+        }
+       }
       }
-      ButtonWidgetClass BtnNewRecipe {
-       position 0.44 0.1
-       size 0.18 0.8
+      PanelWidgetClass BtnNewRecipe {
+       position 0.32 0.42
+       size 0.22 0.55
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       style Default
-       text "New recipe"
+       color 0.17 0.18 0.2 1
+       style rover_sim_colorable
+       {
+        TextWidgetClass BtnNewRecipeText {
+         position 0 0
+         size 1 1
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         ignorepointer 1
+         color 0.92 0.92 0.92 1
+         text "New recipe"
+         font "gui/fonts/metron"
+         "exact text" 1
+         "exact text size" 14
+         text_valign center
+         text_halign center
+        }
+       }
       }
-      ButtonWidgetClass BtnEditRecipe {
-       position 0.63 0.1
-       size 0.18 0.8
+      PanelWidgetClass BtnEditRecipe {
+       position 0.55 0.42
+       size 0.22 0.55
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       style Default
-       text "Edit recipe"
+       color 0.17 0.18 0.2 1
+       style rover_sim_colorable
+       {
+        TextWidgetClass BtnEditRecipeText {
+         position 0 0
+         size 1 1
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         ignorepointer 1
+         color 0.92 0.92 0.92 1
+         text "Edit recipe"
+         font "gui/fonts/metron"
+         "exact text" 1
+         "exact text size" 14
+         text_valign center
+         text_halign center
+        }
+       }
       }
-      ButtonWidgetClass BtnToggleRecipe {
-       position 0.82 0.1
-       size 0.18 0.8
+      PanelWidgetClass BtnToggleRecipe {
+       position 0.78 0.42
+       size 0.22 0.55
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       style Default
-       text "Disable"
+       color 0.17 0.18 0.2 1
+       style rover_sim_colorable
+       {
+        TextWidgetClass BtnToggleRecipeText {
+         position 0 0
+         size 1 1
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         ignorepointer 1
+         color 0.92 0.92 0.92 1
+         text "Disable"
+         font "gui/fonts/metron"
+         "exact text" 1
+         "exact text size" 14
+         text_valign center
+         text_halign center
+        }
+       }
       }
      }
     }
     PanelWidgetClass Editor {
-     visible 0
-     color 0.1 0.1 0.13 0.98
-     position 0.33 0.065
-     size 0.66 0.8
+     position 0.5 0.065
+     size 0.49 0.89
      hexactpos 0
      vexactpos 0
      hexactsize 0
      vexactsize 0
+     color 0.08 0.085 0.1 1
      style rover_sim_colorable
+     visible 0
      {
       TextWidgetClass EditorTitle {
-       ignorepointer 1
-       position 0.02 0.02
-       size 0.96 0.06
+       position 0.03 0.02
+       size 0.94 0.06
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       font "gui/fonts/metron28"
+       ignorepointer 1
+       color 0.86 0.55 0.18 1
        text "Recipe editor"
+       font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 20
        text_valign center
+       text_halign left
       }
-      TextWidgetClass HintText {
-       ignorepointer 1
-       position 0.02 0.09
-       size 0.96 0.05
+      TextWidgetClass EditorHint {
+       position 0.03 0.08
+       size 0.94 0.05
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
+       ignorepointer 1
+       color 0.6 0.62 0.66 1
+       text "Class names separated by commas. Pick an item in the grid, then press + to add it."
        font "gui/fonts/metron"
-       text "Class names separated by commas. Select an item on the left and use + to add it. Base classes (e.g. Knife) accept every child."
+       "exact text" 1
+       "exact text size" 13
        text_valign center
+       text_halign left
       }
       TextWidgetClass LblName {
-       ignorepointer 1
-       position 0.02 0.16
-       size 0.2 0.06
+       position 0.03 0.15
+       size 0.25 0.05
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       font "gui/fonts/metron"
+       ignorepointer 1
+       color 0.92 0.92 0.92 1
        text "Name"
+       font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 15
        text_valign center
+       text_halign left
       }
       EditBoxWidgetClass EdName {
-       position 0.22 0.16
-       size 0.76 0.06
+       position 0.28 0.15
+       size 0.69 0.05
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
        style DefaultBorder
        font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 16
       }
       TextWidgetClass LblIngA {
-       ignorepointer 1
-       position 0.02 0.26
-       size 0.2 0.06
+       position 0.03 0.25
+       size 0.25 0.05
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       font "gui/fonts/metron"
+       ignorepointer 1
+       color 0.92 0.92 0.92 1
        text "Ingredient A"
+       font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 15
        text_valign center
+       text_halign left
       }
       EditBoxWidgetClass EdIngA {
-       position 0.22 0.26
-       size 0.66 0.06
+       position 0.28 0.25
+       size 0.6 0.05
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
        style DefaultBorder
        font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 16
       }
-      ButtonWidgetClass BtnAddA {
-       position 0.9 0.26
-       size 0.08 0.06
+      PanelWidgetClass BtnAddA {
+       position 0.9 0.25
+       size 0.07 0.05
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       style Default
-       text "+"
+       color 0.17 0.18 0.2 1
+       style rover_sim_colorable
+       {
+        TextWidgetClass BtnAddAText {
+         position 0 0
+         size 1 1
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         ignorepointer 1
+         color 0.92 0.92 0.92 1
+         text "+"
+         font "gui/fonts/metron"
+         "exact text" 1
+         "exact text size" 18
+         text_valign center
+         text_halign center
+        }
+       }
       }
-      CheckBoxWidgetClass CbConsumeA {
-       position 0.22 0.33
-       size 0.4 0.05
+      PanelWidgetClass BtnConsumeA {
+       position 0.28 0.31
+       size 0.35 0.045
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       text "Consume ingredient A"
-       checked 1
+       color 0.17 0.18 0.2 1
+       style rover_sim_colorable
+       {
+        TextWidgetClass BtnConsumeAText {
+         position 0 0
+         size 1 1
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         ignorepointer 1
+         color 0.92 0.92 0.92 1
+         text "Consume A: yes"
+         font "gui/fonts/metron"
+         "exact text" 1
+         "exact text size" 13
+         text_valign center
+         text_halign center
+        }
+       }
       }
       TextWidgetClass LblIngB {
-       ignorepointer 1
-       position 0.02 0.42
-       size 0.2 0.06
+       position 0.03 0.4
+       size 0.25 0.05
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       font "gui/fonts/metron"
+       ignorepointer 1
+       color 0.92 0.92 0.92 1
        text "Ingredient B (optional)"
+       font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 15
        text_valign center
+       text_halign left
       }
       EditBoxWidgetClass EdIngB {
-       position 0.22 0.42
-       size 0.66 0.06
+       position 0.28 0.4
+       size 0.6 0.05
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
        style DefaultBorder
        font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 16
       }
-      ButtonWidgetClass BtnAddB {
-       position 0.9 0.42
-       size 0.08 0.06
+      PanelWidgetClass BtnAddB {
+       position 0.9 0.4
+       size 0.07 0.05
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       style Default
-       text "+"
+       color 0.17 0.18 0.2 1
+       style rover_sim_colorable
+       {
+        TextWidgetClass BtnAddBText {
+         position 0 0
+         size 1 1
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         ignorepointer 1
+         color 0.92 0.92 0.92 1
+         text "+"
+         font "gui/fonts/metron"
+         "exact text" 1
+         "exact text size" 18
+         text_valign center
+         text_halign center
+        }
+       }
       }
-      CheckBoxWidgetClass CbConsumeB {
-       position 0.22 0.49
-       size 0.4 0.05
+      PanelWidgetClass BtnConsumeB {
+       position 0.28 0.46
+       size 0.35 0.045
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       text "Consume ingredient B"
-       checked 1
+       color 0.17 0.18 0.2 1
+       style rover_sim_colorable
+       {
+        TextWidgetClass BtnConsumeBText {
+         position 0 0
+         size 1 1
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         ignorepointer 1
+         color 0.92 0.92 0.92 1
+         text "Consume B: yes"
+         font "gui/fonts/metron"
+         "exact text" 1
+         "exact text size" 13
+         text_valign center
+         text_halign center
+        }
+       }
       }
       TextWidgetClass LblResults {
-       ignorepointer 1
-       position 0.02 0.58
-       size 0.2 0.06
+       position 0.03 0.55
+       size 0.25 0.05
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       font "gui/fonts/metron"
+       ignorepointer 1
+       color 0.92 0.92 0.92 1
        text "Results"
+       font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 15
        text_valign center
+       text_halign left
       }
       EditBoxWidgetClass EdResults {
-       position 0.22 0.58
-       size 0.66 0.06
+       position 0.28 0.55
+       size 0.6 0.05
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
        style DefaultBorder
        font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 16
       }
-      ButtonWidgetClass BtnAddResult {
-       position 0.9 0.58
-       size 0.08 0.06
+      PanelWidgetClass BtnAddResult {
+       position 0.9 0.55
+       size 0.07 0.05
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       style Default
-       text "+"
+       color 0.17 0.18 0.2 1
+       style rover_sim_colorable
+       {
+        TextWidgetClass BtnAddResultText {
+         position 0 0
+         size 1 1
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         ignorepointer 1
+         color 0.92 0.92 0.92 1
+         text "+"
+         font "gui/fonts/metron"
+         "exact text" 1
+         "exact text size" 18
+         text_valign center
+         text_halign center
+        }
+       }
       }
-      ButtonWidgetClass BtnSave {
-       position 0.22 0.85
-       size 0.22 0.08
+      PanelWidgetClass BtnSave {
+       position 0.28 0.88
+       size 0.21 0.06
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       style Default
-       text "Save"
+       color 0.2 0.42 0.24 1
+       style rover_sim_colorable
+       {
+        TextWidgetClass BtnSaveText {
+         position 0 0
+         size 1 1
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         ignorepointer 1
+         color 0.92 0.92 0.92 1
+         text "Save"
+         font "gui/fonts/metron"
+         "exact text" 1
+         "exact text size" 16
+         text_valign center
+         text_halign center
+        }
+       }
       }
-      ButtonWidgetClass BtnDelete {
-       position 0.48 0.85
-       size 0.22 0.08
+      PanelWidgetClass BtnDelete {
+       position 0.52 0.88
+       size 0.21 0.06
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       style Default
-       text "Delete"
+       color 0.5 0.18 0.18 1
+       style rover_sim_colorable
+       {
+        TextWidgetClass BtnDeleteText {
+         position 0 0
+         size 1 1
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         ignorepointer 1
+         color 0.92 0.92 0.92 1
+         text "Delete"
+         font "gui/fonts/metron"
+         "exact text" 1
+         "exact text size" 16
+         text_valign center
+         text_halign center
+        }
+       }
       }
-      ButtonWidgetClass BtnCancel {
-       position 0.74 0.85
-       size 0.22 0.08
+      PanelWidgetClass BtnCancel {
+       position 0.76 0.88
+       size 0.21 0.06
        hexactpos 0
        vexactpos 0
        hexactsize 0
        vexactsize 0
-       style Default
-       text "Cancel"
+       color 0.17 0.18 0.2 1
+       style rover_sim_colorable
+       {
+        TextWidgetClass BtnCancelText {
+         position 0 0
+         size 1 1
+         hexactpos 0
+         vexactpos 0
+         hexactsize 0
+         vexactsize 0
+         ignorepointer 1
+         color 0.92 0.92 0.92 1
+         text "Cancel"
+         font "gui/fonts/metron"
+         "exact text" 1
+         "exact text size" 16
+         text_valign center
+         text_halign center
+        }
+       }
       }
      }
+    }
+   }
+  }
+  PanelWidgetClass Tooltip {
+   position 0 0
+   size 340 64
+   hexactpos 1
+   vexactpos 1
+   hexactsize 1
+   vexactsize 1
+   ignorepointer 1
+   visible 0
+   color 0.03 0.03 0.04 0.97
+   style rover_sim_colorable
+   {
+    TextWidgetClass TooltipName {
+     position 0.03 0.05
+     size 0.94 0.45
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     ignorepointer 1
+     color 0.92 0.92 0.92 1
+     text ""
+     font "gui/fonts/metron"
+     "exact text" 1
+     "exact text size" 16
+     text_valign center
+     text_halign left
+    }
+    TextWidgetClass TooltipInfo {
+     position 0.03 0.5
+     size 0.94 0.45
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     ignorepointer 1
+     color 0.6 0.62 0.66 1
+     text ""
+     font "gui/fonts/metron"
+     "exact text" 1
+     "exact text size" 12
+     text_valign center
+     text_halign left
     }
    }
   }

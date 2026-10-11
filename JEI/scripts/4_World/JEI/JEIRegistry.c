@@ -163,6 +163,7 @@ class JEIRegistry
 
 			string display;
 			GetGame().ConfigGetText(path + " displayName", display);
+			display = CleanName(display);
 			if (display == "")
 				continue;
 
@@ -220,6 +221,63 @@ class JEIRegistry
 		return first;
 	}
 
+	// Every mod that provides at least one item, sorted, "DayZ" first.
+	static void GetModNames(TStringArray result)
+	{
+		result.Clear();
+		foreach (JEIItemEntry entry : GetItems())
+		{
+			if (result.Find(entry.ModName) == -1)
+				result.Insert(entry.ModName);
+		}
+		result.Sort();
+		int vanilla = result.Find("DayZ");
+		if (vanilla > 0)
+		{
+			result.Remove(vanilla);
+			result.InsertAt("DayZ", 0);
+		}
+	}
+
+	// Untranslated config strings come back as "$UNT$Name".
+	static string CleanName(string name)
+	{
+		if (name.IndexOf("$UNT$") == 0)
+			return name.Substring(5, name.Length() - 5);
+		return name;
+	}
+
+	// Example items for an ingredient: the class itself if it is an item,
+	// otherwise items inheriting from it (base classes such as "Knife").
+	static void ExpandIngredient(string cls, TStringArray result, int limit)
+	{
+		if (GetItem(cls))
+		{
+			result.Insert(cls);
+			return;
+		}
+		int added = 0;
+		foreach (JEIItemEntry entry : GetItems())
+		{
+			if (added >= limit)
+				return;
+			if (GetGame().IsKindOf(entry.ClassName, cls))
+			{
+				result.Insert(entry.ClassName);
+				added++;
+			}
+		}
+	}
+
+	static string DescribeIngredient(string cls)
+	{
+		if (cls == "Inventory_Base" || cls == "ItemBase")
+			return "Any item";
+		if (GetItem(cls))
+			return GetDisplayName(cls);
+		return "Any " + cls;
+	}
+
 	static string GetDisplayName(string cls)
 	{
 		string cached;
@@ -233,6 +291,7 @@ class JEIRegistry
 			if (GetGame().ConfigGetText(root + " " + cls + " displayName", display) && display != "")
 				break;
 		}
+		display = CleanName(display);
 		if (display == "")
 			display = cls;
 
