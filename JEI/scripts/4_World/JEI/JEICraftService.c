@@ -6,13 +6,21 @@ class JEICraftService
 	protected static const int MAX_CANDIDATES = 64;
 	protected static ref map<string, float> s_LastCraft = new map<string, float>;
 
-	protected static void CollectCandidates(TStringArray names, array<ItemBase> items, array<ItemBase> result)
+	// strict: generic "any item" slots only accept items a known rule allows
+	// (client preview). The server instead relies on the game's CheckRecipe.
+	protected static void CollectCandidates(TStringArray names, TStringArray otherSlot, bool strict, array<ItemBase> items, array<ItemBase> result)
 	{
 		foreach (ItemBase item : items)
 		{
 			if (result.Count() >= MAX_CANDIDATES)
 				return;
-			if (JEIRegistry.IsKindOfAny(item.GetType(), names))
+			string type = item.GetType();
+			bool fits;
+			if (strict)
+				fits = JEIRegistry.FitsSlot(type, names, otherSlot);
+			else
+				fits = JEIRegistry.IsKindOfAny(type, names);
+			if (fits)
 				result.Insert(item);
 		}
 	}
@@ -28,10 +36,11 @@ class JEICraftService
 
 		array<ItemBase> slotA = new array<ItemBase>;
 		array<ItemBase> slotB = new array<ItemBase>;
+		bool strict = !fullCheck || !recipe.Vanilla;
 		if (useA)
-			CollectCandidates(recipe.GetIngredients(0), items, slotA);
+			CollectCandidates(recipe.GetIngredients(0), recipe.GetIngredients(1), strict, items, slotA);
 		if (useB)
-			CollectCandidates(recipe.GetIngredients(1), items, slotB);
+			CollectCandidates(recipe.GetIngredients(1), recipe.GetIngredients(0), strict, items, slotB);
 
 		if (!useB)
 		{
@@ -76,9 +85,9 @@ class JEICraftService
 			if (hasA && hasB)
 				return;
 			string type = item.GetType();
-			if (!hasA && JEIRegistry.IsKindOfAny(type, namesA))
+			if (!hasA && JEIRegistry.FitsSlot(type, namesA, namesB))
 				hasA = true;
-			if (!hasB && JEIRegistry.IsKindOfAny(type, namesB))
+			if (!hasB && JEIRegistry.FitsSlot(type, namesB, namesA))
 				hasB = true;
 		}
 	}

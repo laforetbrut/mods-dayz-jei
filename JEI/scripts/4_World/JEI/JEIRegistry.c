@@ -239,6 +239,86 @@ class JEIRegistry
 		}
 	}
 
+	// --------------------------------------------------------- generic slots
+	// Game recipes such as "Repair" accept any item (Inventory_Base) and filter in
+	// CanDo, which needs real items. JEI cannot run that check, so a generic slot
+	// only matches an item when a known rule says so (repair kits).
+
+	static bool IsGenericIngredient(string name)
+	{
+		return name == "Inventory_Base" || name == "ItemBase";
+	}
+
+	static string ConfigPath(string cls)
+	{
+		TStringArray roots = {"CfgVehicles", "CfgWeapons", "CfgMagazines"};
+		foreach (string root : roots)
+		{
+			if (GetGame().ConfigIsExisting(root + " " + cls))
+				return root + " " + cls;
+		}
+		return "";
+	}
+
+	// Repair kit type of the first kit found in an ingredient list, 0 if none.
+	static int GetRepairKitType(TStringArray names)
+	{
+		if (!names)
+			return 0;
+		foreach (string name : names)
+		{
+			string path = ConfigPath(name);
+			if (path == "")
+				continue;
+			int kitType = GetGame().ConfigGetInt(path + " repairKitType");
+			if (kitType > 0)
+				return kitType;
+		}
+		return 0;
+	}
+
+	static bool IsRepairableWith(string cls, int kitType)
+	{
+		string path = ConfigPath(cls);
+		if (path == "" || kitType <= 0)
+			return false;
+		TIntArray kits = new TIntArray;
+		GetGame().ConfigGetIntArray(path + " repairableWithKits", kits);
+		return kits.Find(kitType) != -1;
+	}
+
+	static void ItemsRepairableWith(int kitType, TStringArray result, int limit)
+	{
+		foreach (JEIItemEntry entry : GetItems())
+		{
+			if (result.Count() >= limit)
+				return;
+			if (IsRepairableWith(entry.ClassName, kitType))
+				result.Insert(entry.ClassName);
+		}
+	}
+
+	// Whether cls really fits a slot, taking generic ingredients into account.
+	static bool FitsSlot(string cls, TStringArray names, TStringArray otherSlot)
+	{
+		if (!names)
+			return false;
+		bool generic = false;
+		foreach (string name : names)
+		{
+			if (IsGenericIngredient(name))
+			{
+				generic = true;
+				continue;
+			}
+			if (cls == name || GetGame().IsKindOf(cls, name))
+				return true;
+		}
+		if (!generic)
+			return false;
+		return IsRepairableWith(cls, GetRepairKitType(otherSlot));
+	}
+
 	// Untranslated config strings come back as "$UNT$Name".
 	static string CleanName(string name)
 	{

@@ -96,12 +96,9 @@ class JEIRecipe
 
 	bool Uses(string cls)
 	{
-		for (int slot = 0; slot < GetSlotCount(); slot++)
-		{
-			if (JEIRegistry.IsKindOfAny(cls, GetIngredients(slot)))
-				return true;
-		}
-		return false;
+		if (JEIRegistry.FitsSlot(cls, GetIngredients(0), GetIngredients(1)))
+			return true;
+		return JEIRegistry.FitsSlot(cls, GetIngredients(1), GetIngredients(0));
 	}
 
 	// Copy usable by the admin editor (editing a game recipe creates a replacement).

@@ -969,7 +969,7 @@ class JEIMenu extends UIScriptedMenu
 
 	protected bool SlotHoldsSelection(JEIRecipe recipe, int slot)
 	{
-		return m_UsesMode && m_SelectedClass != "" && JEIRegistry.IsKindOfAny(m_SelectedClass, recipe.GetIngredients(slot));
+		return m_UsesMode && m_SelectedClass != "" && JEIRegistry.FitsSlot(m_SelectedClass, recipe.GetIngredients(slot), recipe.GetIngredients(1 - slot));
 	}
 
 	protected void ExpandSlot(JEIRecipe recipe, int slot, TStringArray options)
@@ -982,8 +982,18 @@ class JEIMenu extends UIScriptedMenu
 			options.Insert(m_SelectedClass);
 			return;
 		}
+		int kitType = JEIRegistry.GetRepairKitType(recipe.GetIngredients(1 - slot));
 		foreach (string name : names)
+		{
+			if (JEIRegistry.IsGenericIngredient(name))
+			{
+				// "Any item" next to a repair kit: only items that kit can repair.
+				if (kitType > 0)
+					JEIRegistry.ItemsRepairableWith(kitType, options, INGREDIENT_EXAMPLES);
+				continue;
+			}
 			JEIRegistry.ExpandIngredient(name, options, INGREDIENT_EXAMPLES);
+		}
 	}
 
 	protected string DescribeSlot(JEIRecipe recipe, int slot)
@@ -993,6 +1003,14 @@ class JEIMenu extends UIScriptedMenu
 			return "";
 		if (SlotHoldsSelection(recipe, slot))
 			return JEIRegistry.GetDisplayName(m_SelectedClass);
+		if (JEIRegistry.GetRepairKitType(recipe.GetIngredients(1 - slot)) > 0)
+		{
+			foreach (string name : names)
+			{
+				if (JEIRegistry.IsGenericIngredient(name))
+					return "Items this kit can repair";
+			}
+		}
 		if (names.Count() == 1)
 			return JEIRegistry.DescribeIngredient(names[0]);
 		if (names.Count() == 2)
