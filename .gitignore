@@ -1,0 +1,9 @@
+.claude/
+CLAUDE.md
+test-procedures/
+TEST_PROCEDURE_*.html
+*.pbo
+*.bisign
+*.bikey
+*.biprivatekey
+@JEI/

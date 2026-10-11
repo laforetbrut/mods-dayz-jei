@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<modded_inputs>
+	<inputs>
+		<actions>
+			<input name="UAJEIToggle" loc="Open / close JEI" />
+		</actions>
+		<sorting name="jei" loc="JEI - Just Enough Items">
+			<input name="UAJEIToggle" />
+		</sorting>
+	</inputs>
+	<preset>
+		<input name="UAJEIToggle">
+			<btn name="kJ" />
+		</input>
+	</preset>
+</modded_inputs>

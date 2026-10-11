@@ -1,0 +1,163 @@
+// JEI - Just Enough Items
+// Author: vyrriox
+
+class JEICraftService
+{
+	protected static const int MAX_CANDIDATES = 64;
+	protected static ref map<string, float> s_LastCraft = new map<string, float>;
+
+	protected static void CollectCandidates(TStringArray names, array<ItemBase> items, array<ItemBase> result)
+	{
+		foreach (ItemBase item : items)
+		{
+			if (result.Count() >= MAX_CANDIDATES)
+				return;
+			if (JEIRegistry.IsKindOfAny(item.GetType(), names))
+				result.Insert(item);
+		}
+	}
+
+	// Finds distinct items for every used slot. With fullCheck the game recipe's
+	// own conditions (quantity, damage, tools...) are evaluated too.
+	static bool FindPair(JEIRecipe recipe, PlayerBase player, array<ItemBase> items, bool fullCheck, out ItemBase itemA, out ItemBase itemB)
+	{
+		itemA = null;
+		itemB = null;
+		bool useA = recipe.IsSlotUsed(0);
+		bool useB = recipe.IsSlotUsed(1);
+
+		array<ItemBase> slotA = new array<ItemBase>;
+		array<ItemBase> slotB = new array<ItemBase>;
+		if (useA)
+			CollectCandidates(recipe.GetIngredients(0), items, slotA);
+		if (useB)
+			CollectCandidates(recipe.GetIngredients(1), items, slotB);
+
+		if (!useB)
+		{
+			if (slotA.Count() == 0)
+				return false;
+			itemA = slotA[0];
+			return true;
+		}
+		if (!useA)
+		{
+			if (slotB.Count() == 0)
+				return false;
+			itemB = slotB[0];
+			return true;
+		}
+
+		foreach (ItemBase a : slotA)
+		{
+			foreach (ItemBase b : slotB)
+			{
+				if (a == b)
+					continue;
+				if (fullCheck && recipe.Vanilla && !recipe.Vanilla.CheckRecipe(a, b, player))
+					continue;
+				itemA = a;
+				itemB = b;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	// Which ingredient slots can be filled from the given items (client preview).
+	static void SlotAvailability(JEIRecipe recipe, array<ItemBase> items, out bool hasA, out bool hasB)
+	{
+		hasA = !recipe.IsSlotUsed(0);
+		hasB = !recipe.IsSlotUsed(1);
+		TStringArray namesA = recipe.GetIngredients(0);
+		TStringArray namesB = recipe.GetIngredients(1);
+		foreach (ItemBase item : items)
+		{
+			if (hasA && hasB)
+				return;
+			string type = item.GetType();
+			if (!hasA && JEIRegistry.IsKindOfAny(type, namesA))
+				hasA = true;
+			if (!hasB && JEIRegistry.IsKindOfAny(type, namesB))
+				hasB = true;
+		}
+	}
+
+	// Server side (or offline). Returns the number of successful crafts.
+	static int Craft(PlayerBase player, string recipeKey, int count)
+	{
+		if (!player || !player.IsAlive() || player.IsUnconscious() || player.IsRestrained())
+			return 0;
+
+		JEISettings settings = JEISettings.Get();
+		if (!settings.AllowCrafting)
+			return 0;
+
+		JEIRecipe recipe = JEIRegistry.FindRecipe(recipeKey);
+		if (!recipe || recipe.IsDisabled())
+			return 0;
+
+		string key = "local";
+		if (player.GetIdentity())
+			key = player.GetIdentity().GetId();
+
+		float now = GetGame().GetTickTime();
+		float last;
+		if (s_LastCraft.Find(key, last) && now - last < settings.CraftCooldown)
+			return 0;
+		s_LastCraft.Set(key, now);
+
+		PluginRecipesManager manager = PluginRecipesManager.Cast(GetPlugin(PluginRecipesManager));
+		if (recipe.Vanilla && !manager)
+			return 0;
+
+		count = Math.Clamp(count, 1, settings.MaxCraftBatch);
+		array<ItemBase> items = new array<ItemBase>;
+		int crafted = 0;
+
+		for (int i = 0; i < count; i++)
+		{
+			// Rescan each time: the previous craft consumed or moved ingredients.
+			JEIInventoryScanner.Collect(player, settings, items);
+			ItemBase a;
+			ItemBase b;
+			if (!FindPair(recipe, player, items, true, a, b))
+				break;
+
+			if (recipe.Vanilla)
+				manager.PerformRecipeServer(recipe.Vanilla.GetID(), a, b, player);
+			else
+				PerformCustom(recipe.Custom, a, b, player);
+			crafted++;
+		}
+		return crafted;
+	}
+
+	protected static void PerformCustom(JEICustomRecipe recipe, ItemBase a, ItemBase b, PlayerBase player)
+	{
+		foreach (string result : recipe.Results)
+			SpawnFor(player, result);
+
+		if (a && recipe.ConsumeA)
+			ConsumeOne(a);
+		if (b && recipe.ConsumeB)
+			ConsumeOne(b);
+	}
+
+	// Stacks lose one unit, everything else is removed.
+	protected static void ConsumeOne(ItemBase item)
+	{
+		if (item.ConfigGetBool("canBeSplit") && item.GetQuantity() > 1)
+			item.AddQuantity(-1);
+		else
+			GetGame().ObjectDelete(item);
+	}
+
+	static EntityAI SpawnFor(PlayerBase player, string cls)
+	{
+		EntityAI spawned = player.GetInventory().CreateInInventory(cls);
+		if (!spawned)
+			spawned = EntityAI.Cast(GetGame().CreateObjectEx(cls, player.GetPosition(), ECE_PLACE_ON_SURFACE));
+		return spawned;
+	}
+}

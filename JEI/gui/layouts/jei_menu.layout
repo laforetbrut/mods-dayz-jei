@@ -1,0 +1,473 @@
+FrameWidgetClass JEIRoot {
+ position 0 0
+ size 1 1
+ hexactpos 0
+ vexactpos 0
+ hexactsize 0
+ vexactsize 0
+ {
+  PanelWidgetClass Dim {
+   ignorepointer 1
+   color 0 0 0 0.55
+   position 0 0
+   size 1 1
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+   style rover_sim_colorable
+  }
+  PanelWidgetClass Main {
+   color 0.07 0.07 0.08 0.94
+   position 0.04 0.05
+   size 0.92 0.9
+   hexactpos 0
+   vexactpos 0
+   hexactsize 0
+   vexactsize 0
+   style rover_sim_colorable
+   {
+    TextWidgetClass Title {
+     ignorepointer 1
+     position 0.01 0.01
+     size 0.5 0.045
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     text "JEI - Just Enough Items"
+     font "gui/fonts/metron28"
+     text_valign center
+    }
+    ButtonWidgetClass BtnClose {
+     position 0.958 0.01
+     size 0.032 0.045
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     style Default
+     text "X"
+    }
+    EditBoxWidgetClass Search {
+     position 0.01 0.065
+     size 0.3 0.045
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     style DefaultBorder
+     font "gui/fonts/metron"
+    }
+    TextListboxWidgetClass ItemList {
+     position 0.01 0.12
+     size 0.3 0.82
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     font "gui/fonts/metron"
+    }
+    TextWidgetClass ItemCount {
+     ignorepointer 1
+     position 0.01 0.948
+     size 0.3 0.04
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     font "gui/fonts/metron"
+     text_valign center
+    }
+    ItemPreviewWidgetClass Preview {
+     ignorepointer 1
+     position 0.33 0.065
+     size 0.2 0.26
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+    }
+    TextWidgetClass ItemName {
+     ignorepointer 1
+     position 0.55 0.065
+     size 0.43 0.05
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     font "gui/fonts/metron28"
+     text_valign center
+    }
+    MultilineTextWidgetClass ItemInfo {
+     ignorepointer 1
+     position 0.55 0.12
+     size 0.43 0.12
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     font "gui/fonts/metron"
+    }
+    ButtonWidgetClass BtnRecipes {
+     position 0.55 0.26
+     size 0.2 0.05
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     style Default
+     text "How to craft"
+    }
+    ButtonWidgetClass BtnUses {
+     position 0.76 0.26
+     size 0.2 0.05
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     style Default
+     text "Used in"
+    }
+    TextListboxWidgetClass RecipeList {
+     position 0.33 0.34
+     size 0.3 0.52
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     font "gui/fonts/metron"
+    }
+    TextListboxWidgetClass DetailList {
+     position 0.65 0.34
+     size 0.33 0.45
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     font "gui/fonts/metron"
+    }
+    ButtonWidgetClass BtnGoto {
+     position 0.65 0.8
+     size 0.105 0.05
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     style Default
+     text "Show item"
+    }
+    ButtonWidgetClass BtnCraft1 {
+     position 0.763 0.8
+     size 0.105 0.05
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     style Default
+     text "Craft x1"
+    }
+    ButtonWidgetClass BtnCraftMax {
+     position 0.876 0.8
+     size 0.104 0.05
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     style Default
+     text "Craft x10"
+    }
+    TextWidgetClass Status {
+     ignorepointer 1
+     position 0.65 0.86
+     size 0.33 0.04
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     font "gui/fonts/metron"
+     text_valign center
+    }
+    FrameWidgetClass AdminPanel {
+     visible 0
+     position 0.33 0.88
+     size 0.65 0.06
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     {
+      TextWidgetClass AdminLabel {
+       ignorepointer 1
+       position 0 0.1
+       size 0.1 0.8
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       color 0.94 0.47 0.47 1
+       text "ADMIN"
+       font "gui/fonts/metron"
+       text_valign center
+      }
+      ButtonWidgetClass BtnGive1 {
+       position 0.1 0.1
+       size 0.16 0.8
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Default
+       text "Give x1"
+      }
+      ButtonWidgetClass BtnGive10 {
+       position 0.27 0.1
+       size 0.16 0.8
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Default
+       text "Give x10"
+      }
+      ButtonWidgetClass BtnNewRecipe {
+       position 0.44 0.1
+       size 0.18 0.8
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Default
+       text "New recipe"
+      }
+      ButtonWidgetClass BtnEditRecipe {
+       position 0.63 0.1
+       size 0.18 0.8
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Default
+       text "Edit recipe"
+      }
+      ButtonWidgetClass BtnToggleRecipe {
+       position 0.82 0.1
+       size 0.18 0.8
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Default
+       text "Disable"
+      }
+     }
+    }
+    PanelWidgetClass Editor {
+     visible 0
+     color 0.1 0.1 0.13 0.98
+     position 0.33 0.065
+     size 0.66 0.8
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     style rover_sim_colorable
+     {
+      TextWidgetClass EditorTitle {
+       ignorepointer 1
+       position 0.02 0.02
+       size 0.96 0.06
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       font "gui/fonts/metron28"
+       text "Recipe editor"
+       text_valign center
+      }
+      TextWidgetClass HintText {
+       ignorepointer 1
+       position 0.02 0.09
+       size 0.96 0.05
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       font "gui/fonts/metron"
+       text "Class names separated by commas. Select an item on the left and use + to add it. Base classes (e.g. Knife) accept every child."
+       text_valign center
+      }
+      TextWidgetClass LblName {
+       ignorepointer 1
+       position 0.02 0.16
+       size 0.2 0.06
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       font "gui/fonts/metron"
+       text "Name"
+       text_valign center
+      }
+      EditBoxWidgetClass EdName {
+       position 0.22 0.16
+       size 0.76 0.06
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style DefaultBorder
+       font "gui/fonts/metron"
+      }
+      TextWidgetClass LblIngA {
+       ignorepointer 1
+       position 0.02 0.26
+       size 0.2 0.06
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       font "gui/fonts/metron"
+       text "Ingredient A"
+       text_valign center
+      }
+      EditBoxWidgetClass EdIngA {
+       position 0.22 0.26
+       size 0.66 0.06
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style DefaultBorder
+       font "gui/fonts/metron"
+      }
+      ButtonWidgetClass BtnAddA {
+       position 0.9 0.26
+       size 0.08 0.06
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Default
+       text "+"
+      }
+      CheckBoxWidgetClass CbConsumeA {
+       position 0.22 0.33
+       size 0.4 0.05
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       text "Consume ingredient A"
+       checked 1
+      }
+      TextWidgetClass LblIngB {
+       ignorepointer 1
+       position 0.02 0.42
+       size 0.2 0.06
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       font "gui/fonts/metron"
+       text "Ingredient B (optional)"
+       text_valign center
+      }
+      EditBoxWidgetClass EdIngB {
+       position 0.22 0.42
+       size 0.66 0.06
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style DefaultBorder
+       font "gui/fonts/metron"
+      }
+      ButtonWidgetClass BtnAddB {
+       position 0.9 0.42
+       size 0.08 0.06
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Default
+       text "+"
+      }
+      CheckBoxWidgetClass CbConsumeB {
+       position 0.22 0.49
+       size 0.4 0.05
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       text "Consume ingredient B"
+       checked 1
+      }
+      TextWidgetClass LblResults {
+       ignorepointer 1
+       position 0.02 0.58
+       size 0.2 0.06
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       font "gui/fonts/metron"
+       text "Results"
+       text_valign center
+      }
+      EditBoxWidgetClass EdResults {
+       position 0.22 0.58
+       size 0.66 0.06
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style DefaultBorder
+       font "gui/fonts/metron"
+      }
+      ButtonWidgetClass BtnAddResult {
+       position 0.9 0.58
+       size 0.08 0.06
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Default
+       text "+"
+      }
+      ButtonWidgetClass BtnSave {
+       position 0.22 0.85
+       size 0.22 0.08
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Default
+       text "Save"
+      }
+      ButtonWidgetClass BtnDelete {
+       position 0.48 0.85
+       size 0.22 0.08
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Default
+       text "Delete"
+      }
+      ButtonWidgetClass BtnCancel {
+       position 0.74 0.85
+       size 0.22 0.08
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       style Default
+       text "Cancel"
+      }
+     }
+    }
+   }
+  }
+ }
+}
