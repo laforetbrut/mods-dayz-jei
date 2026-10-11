@@ -21,6 +21,46 @@ modded class PluginRecipesManager
 
 modded class RecipeBase
 {
+	// Set while JEI checks or performs a recipe: lifts only the vanilla rule that
+	// one ingredient must be in the player's hands. Every other check still runs.
+	protected bool m_JEI_Anywhere;
+
+	override bool IsRecipeAnywhere()
+	{
+		if (m_JEI_Anywhere)
+			return true;
+		return super.IsRecipeAnywhere();
+	}
+
+	// The game's conditions (quantity, damage, attachments, recipe rules) for two
+	// items in any order. Usable on client and server.
+	bool JEI_Check(ItemBase itemA, ItemBase itemB, PlayerBase player)
+	{
+		if (!CheckIngredientMatch(itemA, itemB))
+			return false;
+		ItemBase first = m_IngredientsSorted[0];
+		ItemBase second = m_IngredientsSorted[1];
+
+		m_JEI_Anywhere = true;
+		bool valid = CheckRecipe(first, second, player);
+		m_JEI_Anywhere = false;
+		return valid;
+	}
+
+	// Server side: same as the vanilla craft, items may be anywhere in reach.
+	bool JEI_Perform(ItemBase itemA, ItemBase itemB, PlayerBase player)
+	{
+		if (!JEI_Check(itemA, itemB, player))
+			return false;
+		ItemBase first = m_IngredientsSorted[0];
+		ItemBase second = m_IngredientsSorted[1];
+
+		m_JEI_Anywhere = true;
+		PerformRecipe(first, second, player);
+		m_JEI_Anywhere = false;
+		return true;
+	}
+
 	// Recipes disabled by a JEI admin cannot be crafted in the world either.
 	override bool CheckRecipe(ItemBase item1, ItemBase item2, PlayerBase player)
 	{

@@ -34,3 +34,10 @@
 **Root cause:** Recipes were created by static factories (`JEIRecipe.FromVanilla`) and passed straight to `array.Insert`; the returned temporary was released, leaving null entries.
 **Fix:** Build objects with a constructor (`new JEIRecipe(...)`), store function results in locals before using them, guard loops against null.
 **Prevention:** In Enforce Script never pass a freshly returned object straight into a call; assign it to a local first, or construct it with `new` at the call site.
+
+## [2026-10-11 18:08] — Craft accepted by JEI but "PerformRecipeServer - recipe not valid"
+**Context:** Crafting a splint from the JEI window with ingredients in the inventory.
+**Error:** `PerformRecipeServer - recipe not valid !!` from the vanilla recipe manager.
+**Root cause:** Read in the vanilla scripts (dta/scripts.pbo): `RecipeBase.CheckRecipe` rejects any recipe not flagged "anywhere" when neither ingredient is in the player's hands. `PerformRecipeServer` also re-sorts ingredients through its cache and runs a sanity check.
+**Fix:** `RecipeBase.JEI_Check` / `JEI_Perform` sort the items with `CheckIngredientMatch`, lift only the hands rule through `IsRecipeAnywhere` while JEI runs, then call `CheckRecipe` / `PerformRecipe` so every other vanilla condition still applies.
+**Prevention:** Check the vanilla source (extract dta/scripts.pbo) before calling engine helpers; do not guess their preconditions.

@@ -76,13 +76,10 @@ class JEICraftService
 		return false;
 	}
 
-	// The game's own conditions (minimum quantity, damage, tools...). The order of
-	// the two items does not always match the slot order, so both are tried.
+	// The game's own conditions (minimum quantity, damage, tools...), in any order.
 	protected static bool PassesGameCheck(RecipeBase recipe, ItemBase a, ItemBase b, PlayerBase player)
 	{
-		if (recipe.CheckRecipe(a, b, player))
-			return true;
-		return recipe.CheckRecipe(b, a, player);
+		return recipe.JEI_Check(a, b, player);
 	}
 
 	// Which ingredient slots can be filled from the given items (client preview).
@@ -141,10 +138,6 @@ class JEICraftService
 		}
 		s_LastCraft.Set(key, now);
 
-		PluginRecipesManager manager = PluginRecipesManager.Cast(GetPlugin(PluginRecipesManager));
-		if (recipe.Vanilla && !manager)
-			return 0;
-
 		count = Math.Clamp(count, 1, settings.MaxCraftBatch);
 		array<ItemBase> items = new array<ItemBase>;
 		int crafted = 0;
@@ -163,9 +156,17 @@ class JEICraftService
 			Print(string.Format("[JEI] Crafting with %1 + %2", a, b));
 
 			if (recipe.Vanilla)
-				manager.PerformRecipeServer(recipe.Vanilla.GetID(), a, b, player);
+			{
+				if (!recipe.Vanilla.JEI_Perform(a, b, player))
+				{
+					Print("[JEI] Game recipe check failed at perform time");
+					break;
+				}
+			}
 			else
+			{
 				PerformCustom(recipe.Custom, a, b, player);
+			}
 			crafted++;
 		}
 		Print(string.Format("[JEI] Crafted %1 / %2", crafted, count));
