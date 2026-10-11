@@ -699,9 +699,10 @@ class JEIMenu extends UIScriptedMenu
 		if (!player)
 			return;
 
-		foreach (JEIRecipe recipe : JEIRegistry.GetRecipes())
+		array<ref JEIRecipe> recipes = JEIRegistry.GetRecipes();
+		foreach (JEIRecipe recipe : recipes)
 		{
-			if (recipe.IsDisabled())
+			if (!recipe || recipe.IsDisabled())
 				continue;
 			ItemBase a;
 			ItemBase b;
@@ -1268,7 +1269,8 @@ class JEIMenu extends UIScriptedMenu
 				oldName = selected.Custom.Name;
 				title = JEILang.T("EDITOR_EDIT");
 			}
-			OpenEditor(selected.ToCustom(), oldName, title);
+			JEICustomRecipe editable = selected.ToCustom();
+			OpenEditor(editable, oldName, title);
 			return true;
 		}
 		if (w == m_BtnToggleRecipe)
@@ -1295,7 +1297,10 @@ class JEIMenu extends UIScriptedMenu
 		else if (w == m_BtnConsumeB)
 			SetConsume(m_EditConsumeA, !m_EditConsumeB);
 		else if (w == m_BtnSave)
-			player.JEI_RequestSaveRecipe(m_EditingOldName, ReadEditor());
+		{
+			JEICustomRecipe edited = ReadEditor();
+			player.JEI_RequestSaveRecipe(m_EditingOldName, edited);
+		}
 		else if (w == m_BtnDelete)
 		{
 			if (m_EditingOldName != "")

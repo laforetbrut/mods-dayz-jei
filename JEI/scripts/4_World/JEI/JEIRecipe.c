@@ -10,20 +10,16 @@ class JEIRecipe
 	RecipeBase Vanilla;
 	ref JEICustomRecipe Custom;
 
-	static JEIRecipe FromVanilla(RecipeBase recipe)
+	// Built in place with "new": a static factory returning a fresh object can
+	// hand back a released instance in Enforce Script.
+	void JEIRecipe(RecipeBase vanilla, JEICustomRecipe custom)
 	{
-		JEIRecipe r = new JEIRecipe();
-		r.Vanilla = recipe;
-		r.Key = "v:" + recipe.ClassName();
-		return r;
-	}
-
-	static JEIRecipe FromCustom(JEICustomRecipe recipe)
-	{
-		JEIRecipe r = new JEIRecipe();
-		r.Custom = recipe;
-		r.Key = "c:" + recipe.Name;
-		return r;
+		Vanilla = vanilla;
+		Custom = custom;
+		if (custom)
+			Key = "c:" + custom.Name;
+		else if (vanilla)
+			Key = "v:" + vanilla.ClassName();
 	}
 
 	bool IsCustom()

@@ -65,19 +65,28 @@ class JEIRegistry
 			foreach (RecipeBase vanilla : s_Vanilla)
 			{
 				if (vanilla)
-					s_Recipes.Insert(JEIRecipe.FromVanilla(vanilla));
+					s_Recipes.Insert(new JEIRecipe(vanilla, null));
 			}
-			foreach (JEICustomRecipe custom : JEIRecipeStore.Get().Recipes)
-				s_Recipes.Insert(JEIRecipe.FromCustom(custom));
+			JEIRecipeStore store = JEIRecipeStore.Get();
+			if (store && store.Recipes)
+			{
+				foreach (JEICustomRecipe custom : store.Recipes)
+				{
+					if (custom)
+						s_Recipes.Insert(new JEIRecipe(null, custom));
+				}
+			}
+			Print(string.Format("[JEI] Recipe list built: %1 recipes", s_Recipes.Count()));
 		}
 		return s_Recipes;
 	}
 
 	static JEIRecipe FindRecipe(string key)
 	{
-		foreach (JEIRecipe recipe : GetRecipes())
+		array<ref JEIRecipe> recipes = GetRecipes();
+		foreach (JEIRecipe recipe : recipes)
 		{
-			if (recipe.Key == key)
+			if (recipe && recipe.Key == key)
 				return recipe;
 		}
 		return null;
@@ -99,8 +108,11 @@ class JEIRegistry
 	static void FindRecipesFor(string cls, bool uses, array<JEIRecipe> result, bool includeDisabled)
 	{
 		result.Clear();
-		foreach (JEIRecipe recipe : GetRecipes())
+		array<ref JEIRecipe> recipes = GetRecipes();
+		foreach (JEIRecipe recipe : recipes)
 		{
+			if (!recipe)
+				continue;
 			if (!includeDisabled && recipe.IsDisabled())
 				continue;
 			if (uses && recipe.Uses(cls))
@@ -298,7 +310,8 @@ class JEIRegistry
 
 	static void ItemsRepairableWith(int kitType, TStringArray result, int limit)
 	{
-		foreach (JEIItemEntry entry : GetItems())
+		array<ref JEIItemEntry> items = GetItems();
+		foreach (JEIItemEntry entry : items)
 		{
 			if (!entry)
 				continue;
@@ -348,7 +361,8 @@ class JEIRegistry
 			return;
 		}
 		int added = 0;
-		foreach (JEIItemEntry entry : GetItems())
+		array<ref JEIItemEntry> items = GetItems();
+		foreach (JEIItemEntry entry : items)
 		{
 			if (!entry)
 				continue;

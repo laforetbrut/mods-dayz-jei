@@ -27,3 +27,10 @@
 **Root cause:** `JsonFileLoader.JsonLoadFile(path, this)` takes an `out` parameter and replaces its target; loading into `this` can leave the singleton null. The client never received settings and fell back to a wrong status.
 **Fix:** Load into a temporary object and copy the fields; guard the send; show "loading" until settings are synced.
 **Prevention:** Never pass `this` to `JsonLoadFile`; always load into a fresh local instance.
+
+## [2026-10-11 18:00] — Server cannot find recipe, NULL pointer in FindRecipe
+**Context:** Craft request from the JEI window.
+**Error:** `NULL pointer to instance` in `JEIRegistry.FindRecipe`, then "unknown or disabled recipe".
+**Root cause:** Recipes were created by static factories (`JEIRecipe.FromVanilla`) and passed straight to `array.Insert`; the returned temporary was released, leaving null entries.
+**Fix:** Build objects with a constructor (`new JEIRecipe(...)`), store function results in locals before using them, guard loops against null.
+**Prevention:** In Enforce Script never pass a freshly returned object straight into a call; assign it to a local first, or construct it with `new` at the call site.
