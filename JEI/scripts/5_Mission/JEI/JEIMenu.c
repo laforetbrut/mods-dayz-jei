@@ -706,7 +706,7 @@ class JEIMenu extends UIScriptedMenu
 				continue;
 			ItemBase a;
 			ItemBase b;
-			if (!JEICraftService.FindPair(recipe, player, m_Available, false, a, b))
+			if (!JEICraftService.FindPair(recipe, player, m_Available, true, a, b))
 				continue;
 			int results = recipe.GetResultCount();
 			for (int i = 0; i < results; i++)
@@ -1171,13 +1171,16 @@ class JEIMenu extends UIScriptedMenu
 		JEISettings settings = JEISettings.Get();
 		SetButtonText(m_BtnCraftMax, JEILang.F("CRAFT_N", JEILang.N(settings.MaxCraftBatch)));
 
+		// present: the items are around. ready: the game's recipe conditions pass too.
+		bool present;
 		bool ready;
 		if (recipe)
 		{
 			ItemBase a;
 			ItemBase b;
 			PlayerBase player = PlayerBase.Cast(GetGame().GetPlayer());
-			ready = JEICraftService.FindPair(recipe, player, m_Available, false, a, b);
+			present = JEICraftService.FindPair(recipe, player, m_Available, false, a, b);
+			ready = present && JEICraftService.FindPair(recipe, player, m_Available, true, a, b);
 		}
 
 		bool canCraft = recipe && ready && !recipe.IsDisabled() && settings.AllowCrafting && JEISettings.IsSynced();
@@ -1194,6 +1197,8 @@ class JEIMenu extends UIScriptedMenu
 			SetStatus(JEILang.T("STATUS_SERVER_OFF"), COLOR_MISSING);
 		else if (ready)
 			SetStatus(JEILang.T("STATUS_READY"), COLOR_OK);
+		else if (present)
+			SetStatus(JEILang.T("STATUS_CONDITIONS"), COLOR_MISSING);
 		else
 			SetStatus(JEILang.T("STATUS_MISSING"), COLOR_MISSING);
 	}

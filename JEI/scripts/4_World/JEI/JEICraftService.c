@@ -57,13 +57,16 @@ class JEICraftService
 			return true;
 		}
 
+		if (fullCheck && GetGame().IsServer())
+			Print(string.Format("[JEI] %1: %2 candidate(s) for slot A, %3 for slot B", recipe.Key, slotA.Count(), slotB.Count()));
+
 		foreach (ItemBase a : slotA)
 		{
 			foreach (ItemBase b : slotB)
 			{
 				if (a == b)
 					continue;
-				if (fullCheck && recipe.Vanilla && !recipe.Vanilla.CheckRecipe(a, b, player))
+				if (fullCheck && recipe.Vanilla && !PassesGameCheck(recipe.Vanilla, a, b, player))
 					continue;
 				itemA = a;
 				itemB = b;
@@ -71,6 +74,15 @@ class JEICraftService
 			}
 		}
 		return false;
+	}
+
+	// The game's own conditions (minimum quantity, damage, tools...). The order of
+	// the two items does not always match the slot order, so both are tried.
+	protected static bool PassesGameCheck(RecipeBase recipe, ItemBase a, ItemBase b, PlayerBase player)
+	{
+		if (recipe.CheckRecipe(a, b, player))
+			return true;
+		return recipe.CheckRecipe(b, a, player);
 	}
 
 	// Which ingredient slots can be filled from the given items (client preview).
