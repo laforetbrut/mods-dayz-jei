@@ -30,8 +30,8 @@ PanelWidgetClass Tile {
    font "gui/fonts/metron"
    "exact text" 1
    "exact text size" 11
-   text_valign center
-   text_halign center
+   "text valign" center
+   "text halign" center
    visible 0
   }
  }

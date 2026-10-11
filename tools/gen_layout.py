@@ -48,7 +48,7 @@ def frame(name, x, y, w, h, children=None, extra=()):
 def text(name, x, y, w, h, value="", size=16, color=TEXT, halign="left", extra=()):
     props = [*rel(x, y, w, h), "ignorepointer 1", f"color {color}", f'text "{value}"',
              'font "gui/fonts/metron"', '"exact text" 1', f'"exact text size" {size}',
-             "text_valign center", f"text_halign {halign}", *extra]
+             '"text valign" center', f'"text halign" {halign}', *extra]
     return W("TextWidgetClass", name, props)
 
 
@@ -66,14 +66,18 @@ def slot(name, x, y, w, h):
 
 
 main_children = [
-    text("Title", 0.012, 0.012, 0.3, 0.04, "JEI  Just Enough Items", 22, ACCENT),
-    button("BtnClose", 0.965, 0.012, 0.025, 0.04, "X", 16),
+    panel("HeaderBar", 0, 0, 1, 0.055, "0.09 0.095 0.11 1", extra=["ignorepointer 1"]),
+    panel("HeaderLine", 0, 0.055, 1, 0.003, ACCENT, extra=["ignorepointer 1"]),
+    text("Title", 0.012, 0.008, 0.3, 0.04, "JEI", 24, ACCENT),
+    text("Subtitle", 0.045, 0.008, 0.3, 0.04, "Just Enough Items", 16, MUTED),
+    button("BtnClose", 0.968, 0.01, 0.026, 0.037, "X", 16),
 
     # Left: item grid
-    editbox("Search", 0.012, 0.065, 0.25, 0.045),
-    button("BtnSort", 0.268, 0.065, 0.105, 0.045, "Sort: name", 13),
-    button("BtnModFilter", 0.378, 0.065, 0.104, 0.045, "All mods", 13),
-    text("SearchHint", 0.012, 0.112, 0.47, 0.025, "name   @mod   =BaseClass        LMB recipe  -  RMB uses", 12, MUTED),
+    editbox("Search", 0.012, 0.068, 0.25, 0.045),
+    text("SearchPlaceholder", 0.02, 0.068, 0.24, 0.045, "Search...", 15, MUTED),
+    button("BtnSort", 0.268, 0.068, 0.105, 0.045, "Sort: name", 13),
+    button("BtnModFilter", 0.378, 0.068, 0.104, 0.045, "All mods", 13),
+    text("SearchHint", 0.012, 0.112, 0.47, 0.025, "Left click: how to craft    Right click: used in    Wheel: pages    @mod  =Class", 12, MUTED),
     panel("Grid", 0.012, 0.14, 0.47, 0.76, CARD),
     button("BtnPrev", 0.012, 0.91, 0.05, 0.045, "<", 18),
     text("PageText", 0.065, 0.91, 0.12, 0.045, "1 / 1", 15, TEXT, "center"),
@@ -81,10 +85,10 @@ main_children = [
     text("ItemCount", 0.25, 0.91, 0.232, 0.045, "", 13, MUTED, "right"),
 
     # Right: selected item
-    panel("PreviewBg", 0.5, 0.065, 0.13, 0.2, CARD, [
+    panel("PreviewBg", 0.5, 0.068, 0.13, 0.2, CARD, [
         W("ItemPreviewWidgetClass", "Preview", [*rel(0.05, 0.05, 0.9, 0.9), "ignorepointer 1"]),
     ]),
-    text("ItemName", 0.645, 0.065, 0.345, 0.05, "Select an item", 22),
+    text("ItemName", 0.645, 0.068, 0.345, 0.05, "Select an item", 22),
     text("ItemInfo", 0.645, 0.115, 0.345, 0.035, "", 13, MUTED),
     text("ItemInfo2", 0.645, 0.15, 0.345, 0.035, "", 13, MUTED),
     button("BtnRecipes", 0.645, 0.21, 0.17, 0.05, "How to craft", 15),
@@ -92,6 +96,8 @@ main_children = [
 
     # Recipe card
     panel("RecipeCard", 0.5, 0.28, 0.49, 0.43, CARD, [
+        panel("RecipeAccent", 0, 0, 0.006, 1, ACCENT, extra=["ignorepointer 1"]),
+        panel("RecipeDivider", 0.03, 0.235, 0.94, 0.004, "0.2 0.21 0.24 1", extra=["ignorepointer 1"]),
         text("RecipeTitle", 0.03, 0.03, 0.62, 0.12, "", 19, ACCENT),
         button("BtnRecPrev", 0.68, 0.035, 0.08, 0.11, "<", 18),
         text("RecPageText", 0.765, 0.035, 0.13, 0.11, "", 15, TEXT, "center"),
@@ -150,7 +156,7 @@ main_children = [
 root = W("FrameWidgetClass", "JEIRoot", rel(0, 0, 1, 1), [
     panel("Dim", 0, 0, 1, 1, "0 0 0 0.6", extra=["ignorepointer 1"]),
     panel("Main", 0.06, 0.06, 0.88, 0.88, BG, main_children),
-    W("PanelWidgetClass", "Tooltip", ["position 0 0", "size 340 64", "hexactpos 1", "vexactpos 1", "hexactsize 1",
+    W("PanelWidgetClass", "Tooltip", ["position 0 0", "size 460 68", "hexactpos 1", "vexactpos 1", "hexactsize 1",
                                       "vexactsize 1", "ignorepointer 1", "visible 0", "color 0.03 0.03 0.04 0.97",
                                       "style rover_sim_colorable"], [
         text("TooltipName", 0.03, 0.05, 0.94, 0.45, "", 16),

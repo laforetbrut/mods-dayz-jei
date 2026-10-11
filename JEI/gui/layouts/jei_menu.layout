@@ -27,8 +27,30 @@ FrameWidgetClass JEIRoot {
    color 0.055 0.06 0.07 0.96
    style rover_sim_colorable
    {
+    PanelWidgetClass HeaderBar {
+     position 0 0
+     size 1 0.055
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     color 0.09 0.095 0.11 1
+     style rover_sim_colorable
+     ignorepointer 1
+    }
+    PanelWidgetClass HeaderLine {
+     position 0 0.055
+     size 1 0.003
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     color 0.86 0.55 0.18 1
+     style rover_sim_colorable
+     ignorepointer 1
+    }
     TextWidgetClass Title {
-     position 0.012 0.012
+     position 0.012 0.008
      size 0.3 0.04
      hexactpos 0
      vexactpos 0
@@ -36,16 +58,32 @@ FrameWidgetClass JEIRoot {
      vexactsize 0
      ignorepointer 1
      color 0.86 0.55 0.18 1
-     text "JEI  Just Enough Items"
+     text "JEI"
      font "gui/fonts/metron"
      "exact text" 1
-     "exact text size" 22
-     text_valign center
-     text_halign left
+     "exact text size" 24
+     "text valign" center
+     "text halign" left
+    }
+    TextWidgetClass Subtitle {
+     position 0.045 0.008
+     size 0.3 0.04
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     ignorepointer 1
+     color 0.6 0.62 0.66 1
+     text "Just Enough Items"
+     font "gui/fonts/metron"
+     "exact text" 1
+     "exact text size" 16
+     "text valign" center
+     "text halign" left
     }
     PanelWidgetClass BtnClose {
-     position 0.965 0.012
-     size 0.025 0.04
+     position 0.968 0.01
+     size 0.026 0.037
      hexactpos 0
      vexactpos 0
      hexactsize 0
@@ -66,13 +104,13 @@ FrameWidgetClass JEIRoot {
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 16
-       text_valign center
-       text_halign center
+       "text valign" center
+       "text halign" center
       }
      }
     }
     EditBoxWidgetClass Search {
-     position 0.012 0.065
+     position 0.012 0.068
      size 0.25 0.045
      hexactpos 0
      vexactpos 0
@@ -83,8 +121,24 @@ FrameWidgetClass JEIRoot {
      "exact text" 1
      "exact text size" 16
     }
+    TextWidgetClass SearchPlaceholder {
+     position 0.02 0.068
+     size 0.24 0.045
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     ignorepointer 1
+     color 0.6 0.62 0.66 1
+     text "Search..."
+     font "gui/fonts/metron"
+     "exact text" 1
+     "exact text size" 15
+     "text valign" center
+     "text halign" left
+    }
     PanelWidgetClass BtnSort {
-     position 0.268 0.065
+     position 0.268 0.068
      size 0.105 0.045
      hexactpos 0
      vexactpos 0
@@ -106,13 +160,13 @@ FrameWidgetClass JEIRoot {
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 13
-       text_valign center
-       text_halign center
+       "text valign" center
+       "text halign" center
       }
      }
     }
     PanelWidgetClass BtnModFilter {
-     position 0.378 0.065
+     position 0.378 0.068
      size 0.104 0.045
      hexactpos 0
      vexactpos 0
@@ -134,8 +188,8 @@ FrameWidgetClass JEIRoot {
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 13
-       text_valign center
-       text_halign center
+       "text valign" center
+       "text halign" center
       }
      }
     }
@@ -148,12 +202,12 @@ FrameWidgetClass JEIRoot {
      vexactsize 0
      ignorepointer 1
      color 0.6 0.62 0.66 1
-     text "name   @mod   =BaseClass        LMB recipe  -  RMB uses"
+     text "Left click: how to craft    Right click: used in    Wheel: pages    @mod  =Class"
      font "gui/fonts/metron"
      "exact text" 1
      "exact text size" 12
-     text_valign center
-     text_halign left
+     "text valign" center
+     "text halign" left
     }
     PanelWidgetClass Grid {
      position 0.012 0.14
@@ -188,8 +242,8 @@ FrameWidgetClass JEIRoot {
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 18
-       text_valign center
-       text_halign center
+       "text valign" center
+       "text halign" center
       }
      }
     }
@@ -206,8 +260,8 @@ FrameWidgetClass JEIRoot {
      font "gui/fonts/metron"
      "exact text" 1
      "exact text size" 15
-     text_valign center
-     text_halign center
+     "text valign" center
+     "text halign" center
     }
     PanelWidgetClass BtnNext {
      position 0.188 0.91
@@ -232,8 +286,8 @@ FrameWidgetClass JEIRoot {
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 18
-       text_valign center
-       text_halign center
+       "text valign" center
+       "text halign" center
       }
      }
     }
@@ -250,11 +304,11 @@ FrameWidgetClass JEIRoot {
      font "gui/fonts/metron"
      "exact text" 1
      "exact text size" 13
-     text_valign center
-     text_halign right
+     "text valign" center
+     "text halign" right
     }
     PanelWidgetClass PreviewBg {
-     position 0.5 0.065
+     position 0.5 0.068
      size 0.13 0.2
      hexactpos 0
      vexactpos 0
@@ -275,7 +329,7 @@ FrameWidgetClass JEIRoot {
      }
     }
     TextWidgetClass ItemName {
-     position 0.645 0.065
+     position 0.645 0.068
      size 0.345 0.05
      hexactpos 0
      vexactpos 0
@@ -287,8 +341,8 @@ FrameWidgetClass JEIRoot {
      font "gui/fonts/metron"
      "exact text" 1
      "exact text size" 22
-     text_valign center
-     text_halign left
+     "text valign" center
+     "text halign" left
     }
     TextWidgetClass ItemInfo {
      position 0.645 0.115
@@ -303,8 +357,8 @@ FrameWidgetClass JEIRoot {
      font "gui/fonts/metron"
      "exact text" 1
      "exact text size" 13
-     text_valign center
-     text_halign left
+     "text valign" center
+     "text halign" left
     }
     TextWidgetClass ItemInfo2 {
      position 0.645 0.15
@@ -319,8 +373,8 @@ FrameWidgetClass JEIRoot {
      font "gui/fonts/metron"
      "exact text" 1
      "exact text size" 13
-     text_valign center
-     text_halign left
+     "text valign" center
+     "text halign" left
     }
     PanelWidgetClass BtnRecipes {
      position 0.645 0.21
@@ -345,8 +399,8 @@ FrameWidgetClass JEIRoot {
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 15
-       text_valign center
-       text_halign center
+       "text valign" center
+       "text halign" center
       }
      }
     }
@@ -373,8 +427,8 @@ FrameWidgetClass JEIRoot {
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 15
-       text_valign center
-       text_halign center
+       "text valign" center
+       "text halign" center
       }
      }
     }
@@ -388,6 +442,28 @@ FrameWidgetClass JEIRoot {
      color 0.1 0.105 0.12 1
      style rover_sim_colorable
      {
+      PanelWidgetClass RecipeAccent {
+       position 0 0
+       size 0.006 1
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       color 0.86 0.55 0.18 1
+       style rover_sim_colorable
+       ignorepointer 1
+      }
+      PanelWidgetClass RecipeDivider {
+       position 0.03 0.235
+       size 0.94 0.004
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       color 0.2 0.21 0.24 1
+       style rover_sim_colorable
+       ignorepointer 1
+      }
       TextWidgetClass RecipeTitle {
        position 0.03 0.03
        size 0.62 0.12
@@ -401,8 +477,8 @@ FrameWidgetClass JEIRoot {
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 19
-       text_valign center
-       text_halign left
+       "text valign" center
+       "text halign" left
       }
       PanelWidgetClass BtnRecPrev {
        position 0.68 0.035
@@ -427,8 +503,8 @@ FrameWidgetClass JEIRoot {
          font "gui/fonts/metron"
          "exact text" 1
          "exact text size" 18
-         text_valign center
-         text_halign center
+         "text valign" center
+         "text halign" center
         }
        }
       }
@@ -445,8 +521,8 @@ FrameWidgetClass JEIRoot {
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 15
-       text_valign center
-       text_halign center
+       "text valign" center
+       "text halign" center
       }
       PanelWidgetClass BtnRecNext {
        position 0.9 0.035
@@ -471,8 +547,8 @@ FrameWidgetClass JEIRoot {
          font "gui/fonts/metron"
          "exact text" 1
          "exact text size" 18
-         text_valign center
-         text_halign center
+         "text valign" center
+         "text halign" center
         }
        }
       }
@@ -489,8 +565,8 @@ FrameWidgetClass JEIRoot {
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 13
-       text_valign center
-       text_halign left
+       "text valign" center
+       "text halign" left
       }
       FrameWidgetClass SlotA {
        position 0.04 0.3
@@ -513,8 +589,8 @@ FrameWidgetClass JEIRoot {
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 30
-       text_valign center
-       text_halign center
+       "text valign" center
+       "text halign" center
       }
       FrameWidgetClass SlotB {
        position 0.27 0.3
@@ -537,8 +613,8 @@ FrameWidgetClass JEIRoot {
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 32
-       text_valign center
-       text_halign center
+       "text valign" center
+       "text halign" center
       }
       FrameWidgetClass SlotR0 {
        position 0.54 0.3
@@ -577,8 +653,8 @@ FrameWidgetClass JEIRoot {
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 13
-       text_valign center
-       text_halign center
+       "text valign" center
+       "text halign" center
       }
       TextWidgetClass SlotBName {
        position 0.23 0.72
@@ -593,8 +669,8 @@ FrameWidgetClass JEIRoot {
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 13
-       text_valign center
-       text_halign center
+       "text valign" center
+       "text halign" center
       }
       TextWidgetClass ResultName {
        position 0.53 0.66
@@ -609,8 +685,8 @@ FrameWidgetClass JEIRoot {
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 13
-       text_valign center
-       text_halign center
+       "text valign" center
+       "text halign" center
       }
       TextWidgetClass SlotAState {
        position 0.0 0.82
@@ -625,8 +701,8 @@ FrameWidgetClass JEIRoot {
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 12
-       text_valign center
-       text_halign center
+       "text valign" center
+       "text halign" center
       }
       TextWidgetClass SlotBState {
        position 0.23 0.82
@@ -641,8 +717,8 @@ FrameWidgetClass JEIRoot {
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 12
-       text_valign center
-       text_halign center
+       "text valign" center
+       "text halign" center
       }
       TextWidgetClass NoRecipe {
        position 0.03 0.3
@@ -657,8 +733,8 @@ FrameWidgetClass JEIRoot {
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 16
-       text_valign center
-       text_halign center
+       "text valign" center
+       "text halign" center
       }
      }
     }
@@ -685,8 +761,8 @@ FrameWidgetClass JEIRoot {
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 16
-       text_valign center
-       text_halign center
+       "text valign" center
+       "text halign" center
       }
      }
     }
@@ -713,8 +789,8 @@ FrameWidgetClass JEIRoot {
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 16
-       text_valign center
-       text_halign center
+       "text valign" center
+       "text halign" center
       }
      }
     }
@@ -731,8 +807,8 @@ FrameWidgetClass JEIRoot {
      font "gui/fonts/metron"
      "exact text" 1
      "exact text size" 14
-     text_valign center
-     text_halign left
+     "text valign" center
+     "text halign" left
     }
     FrameWidgetClass AdminPanel {
      position 0.5 0.85
@@ -756,8 +832,8 @@ FrameWidgetClass JEIRoot {
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 12
-       text_valign center
-       text_halign left
+       "text valign" center
+       "text halign" left
       }
       PanelWidgetClass BtnGive1 {
        position 0.0 0.42
@@ -782,8 +858,8 @@ FrameWidgetClass JEIRoot {
          font "gui/fonts/metron"
          "exact text" 1
          "exact text size" 14
-         text_valign center
-         text_halign center
+         "text valign" center
+         "text halign" center
         }
        }
       }
@@ -810,8 +886,8 @@ FrameWidgetClass JEIRoot {
          font "gui/fonts/metron"
          "exact text" 1
          "exact text size" 14
-         text_valign center
-         text_halign center
+         "text valign" center
+         "text halign" center
         }
        }
       }
@@ -838,8 +914,8 @@ FrameWidgetClass JEIRoot {
          font "gui/fonts/metron"
          "exact text" 1
          "exact text size" 14
-         text_valign center
-         text_halign center
+         "text valign" center
+         "text halign" center
         }
        }
       }
@@ -866,8 +942,8 @@ FrameWidgetClass JEIRoot {
          font "gui/fonts/metron"
          "exact text" 1
          "exact text size" 14
-         text_valign center
-         text_halign center
+         "text valign" center
+         "text halign" center
         }
        }
       }
@@ -894,8 +970,8 @@ FrameWidgetClass JEIRoot {
          font "gui/fonts/metron"
          "exact text" 1
          "exact text size" 14
-         text_valign center
-         text_halign center
+         "text valign" center
+         "text halign" center
         }
        }
       }
@@ -925,8 +1001,8 @@ FrameWidgetClass JEIRoot {
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 20
-       text_valign center
-       text_halign left
+       "text valign" center
+       "text halign" left
       }
       TextWidgetClass EditorHint {
        position 0.03 0.08
@@ -941,8 +1017,8 @@ FrameWidgetClass JEIRoot {
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 13
-       text_valign center
-       text_halign left
+       "text valign" center
+       "text halign" left
       }
       TextWidgetClass LblName {
        position 0.03 0.15
@@ -957,8 +1033,8 @@ FrameWidgetClass JEIRoot {
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 15
-       text_valign center
-       text_halign left
+       "text valign" center
+       "text halign" left
       }
       EditBoxWidgetClass EdName {
        position 0.28 0.15
@@ -985,8 +1061,8 @@ FrameWidgetClass JEIRoot {
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 15
-       text_valign center
-       text_halign left
+       "text valign" center
+       "text halign" left
       }
       EditBoxWidgetClass EdIngA {
        position 0.28 0.25
@@ -1023,8 +1099,8 @@ FrameWidgetClass JEIRoot {
          font "gui/fonts/metron"
          "exact text" 1
          "exact text size" 18
-         text_valign center
-         text_halign center
+         "text valign" center
+         "text halign" center
         }
        }
       }
@@ -1051,8 +1127,8 @@ FrameWidgetClass JEIRoot {
          font "gui/fonts/metron"
          "exact text" 1
          "exact text size" 13
-         text_valign center
-         text_halign center
+         "text valign" center
+         "text halign" center
         }
        }
       }
@@ -1069,8 +1145,8 @@ FrameWidgetClass JEIRoot {
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 15
-       text_valign center
-       text_halign left
+       "text valign" center
+       "text halign" left
       }
       EditBoxWidgetClass EdIngB {
        position 0.28 0.4
@@ -1107,8 +1183,8 @@ FrameWidgetClass JEIRoot {
          font "gui/fonts/metron"
          "exact text" 1
          "exact text size" 18
-         text_valign center
-         text_halign center
+         "text valign" center
+         "text halign" center
         }
        }
       }
@@ -1135,8 +1211,8 @@ FrameWidgetClass JEIRoot {
          font "gui/fonts/metron"
          "exact text" 1
          "exact text size" 13
-         text_valign center
-         text_halign center
+         "text valign" center
+         "text halign" center
         }
        }
       }
@@ -1153,8 +1229,8 @@ FrameWidgetClass JEIRoot {
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 15
-       text_valign center
-       text_halign left
+       "text valign" center
+       "text halign" left
       }
       EditBoxWidgetClass EdResults {
        position 0.28 0.55
@@ -1191,8 +1267,8 @@ FrameWidgetClass JEIRoot {
          font "gui/fonts/metron"
          "exact text" 1
          "exact text size" 18
-         text_valign center
-         text_halign center
+         "text valign" center
+         "text halign" center
         }
        }
       }
@@ -1219,8 +1295,8 @@ FrameWidgetClass JEIRoot {
          font "gui/fonts/metron"
          "exact text" 1
          "exact text size" 16
-         text_valign center
-         text_halign center
+         "text valign" center
+         "text halign" center
         }
        }
       }
@@ -1247,8 +1323,8 @@ FrameWidgetClass JEIRoot {
          font "gui/fonts/metron"
          "exact text" 1
          "exact text size" 16
-         text_valign center
-         text_halign center
+         "text valign" center
+         "text halign" center
         }
        }
       }
@@ -1275,8 +1351,8 @@ FrameWidgetClass JEIRoot {
          font "gui/fonts/metron"
          "exact text" 1
          "exact text size" 16
-         text_valign center
-         text_halign center
+         "text valign" center
+         "text halign" center
         }
        }
       }
@@ -1286,7 +1362,7 @@ FrameWidgetClass JEIRoot {
   }
   PanelWidgetClass Tooltip {
    position 0 0
-   size 340 64
+   size 460 68
    hexactpos 1
    vexactpos 1
    hexactsize 1
@@ -1309,8 +1385,8 @@ FrameWidgetClass JEIRoot {
      font "gui/fonts/metron"
      "exact text" 1
      "exact text size" 16
-     text_valign center
-     text_halign left
+     "text valign" center
+     "text halign" left
     }
     TextWidgetClass TooltipInfo {
      position 0.03 0.5
@@ -1325,8 +1401,8 @@ FrameWidgetClass JEIRoot {
      font "gui/fonts/metron"
      "exact text" 1
      "exact text size" 12
-     text_valign center
-     text_halign left
+     "text valign" center
+     "text halign" left
     }
    }
   }

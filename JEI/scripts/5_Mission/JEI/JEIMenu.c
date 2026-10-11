@@ -39,6 +39,7 @@ class JEIMenu extends UIScriptedMenu
 	protected ref JEIUIHandler m_Handler;
 
 	protected EditBoxWidget m_Search;
+	protected Widget m_SearchPlaceholder;
 	protected Widget m_Grid;
 	protected TextWidget m_PageText;
 	protected TextWidget m_ItemCount;
@@ -152,6 +153,7 @@ class JEIMenu extends UIScriptedMenu
 		m_Handler = new JEIUIHandler(this);
 
 		m_Search      = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("Search"));
+		m_SearchPlaceholder = layoutRoot.FindAnyWidget("SearchPlaceholder");
 		m_Grid        = layoutRoot.FindAnyWidget("Grid");
 		m_PageText    = TextWidget.Cast(layoutRoot.FindAnyWidget("PageText"));
 		m_ItemCount   = TextWidget.Cast(layoutRoot.FindAnyWidget("ItemCount"));
@@ -341,6 +343,8 @@ class JEIMenu extends UIScriptedMenu
 		{
 			bool firstFilter = m_LastSearch == "#none";
 			m_LastSearch = search;
+			if (m_SearchPlaceholder)
+				m_SearchPlaceholder.Show(search == "");
 			ApplyFilter(firstFilter);
 		}
 
@@ -497,8 +501,39 @@ class JEIMenu extends UIScriptedMenu
 			modName = entry.ModName;
 		m_TooltipName.SetText(JEIRegistry.GetDisplayName(cls));
 		m_TooltipInfo.SetText(string.Format("%1  -  %2", modName, cls));
+
+		JEIRecipe recipe = GetSelectedRecipe();
+		int slot = -1;
+		if (tile == m_SlotA)
+			slot = 0;
+		else if (tile == m_SlotB)
+			slot = 1;
+		if (recipe && slot != -1)
+			m_TooltipInfo.SetText("Accepts: " + AcceptedList(recipe, slot));
 		m_Tooltip.Show(true);
 		UpdateTooltipPosition();
+	}
+
+	protected string AcceptedList(JEIRecipe recipe, int slot)
+	{
+		string text;
+		TStringArray names = recipe.GetIngredients(slot);
+		if (!names)
+			return text;
+		int shown = 0;
+		foreach (string name : names)
+		{
+			if (shown == 4)
+			{
+				text += string.Format(", +%1", names.Count() - shown);
+				break;
+			}
+			if (text != "")
+				text += ", ";
+			text += JEIRegistry.DescribeIngredient(name);
+			shown++;
+		}
+		return text;
 	}
 
 	protected void HideTooltip()
@@ -932,11 +967,21 @@ class JEIMenu extends UIScriptedMenu
 		UpdateAvailabilityView();
 	}
 
+	protected bool SlotHoldsSelection(JEIRecipe recipe, int slot)
+	{
+		return m_UsesMode && m_SelectedClass != "" && JEIRegistry.IsKindOfAny(m_SelectedClass, recipe.GetIngredients(slot));
+	}
+
 	protected void ExpandSlot(JEIRecipe recipe, int slot, TStringArray options)
 	{
 		TStringArray names = recipe.GetIngredients(slot);
 		if (!names)
 			return;
+		if (SlotHoldsSelection(recipe, slot))
+		{
+			options.Insert(m_SelectedClass);
+			return;
+		}
 		foreach (string name : names)
 			JEIRegistry.ExpandIngredient(name, options, INGREDIENT_EXAMPLES);
 	}
@@ -946,9 +991,13 @@ class JEIMenu extends UIScriptedMenu
 		TStringArray names = recipe.GetIngredients(slot);
 		if (!names || names.Count() == 0)
 			return "";
+		if (SlotHoldsSelection(recipe, slot))
+			return JEIRegistry.GetDisplayName(m_SelectedClass);
 		if (names.Count() == 1)
 			return JEIRegistry.DescribeIngredient(names[0]);
-		return string.Format("%1 (+%2 more)", JEIRegistry.DescribeIngredient(names[0]), names.Count() - 1);
+		if (names.Count() == 2)
+			return JEIRegistry.DescribeIngredient(names[0]) + " or " + JEIRegistry.DescribeIngredient(names[1]);
+		return string.Format("%1 or %2 other items", JEIRegistry.DescribeIngredient(names[0]), names.Count() - 1);
 	}
 
 	// Ingredient slots accepting several items cycle through them, like JEI.
