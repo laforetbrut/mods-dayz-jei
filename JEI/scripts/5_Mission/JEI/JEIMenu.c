@@ -472,13 +472,19 @@ class JEIMenu extends UIScriptedMenu
 		return null;
 	}
 
+	// Enforce Script has no shift operator: hover colors are listed per base color.
 	protected static int Lighten(int color)
 	{
-		int a = (color >> 24) & 0xFF;
-		int r = Math.Min(255, ((color >> 16) & 0xFF) + 30);
-		int g = Math.Min(255, ((color >> 8) & 0xFF) + 30);
-		int b = Math.Min(255, (color & 0xFF) + 30);
-		return ARGB(a, r, g, b);
+		switch (color)
+		{
+			case COLOR_BTN_ON:
+				return 0xFFAA7028;
+			case COLOR_BTN_GO:
+				return 0xFF428A4E;
+			case COLOR_BTN_RED:
+				return 0xFFA03C3C;
+		}
+		return 0xFF464A52;
 	}
 
 	protected void ShowTooltip(JEITile tile)

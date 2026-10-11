@@ -13,3 +13,10 @@
 **Root cause:** DayZ keeps loaded PBOs locked.
 **Fix:** Close the Diag server and client before packing.
 **Prevention:** `start-test.bat` packs before launching; close the game before relaunching it.
+
+## [2026-10-11 17:32] — Mission module fails to compile on shift operator
+**Context:** New JEI interface, hover color helper.
+**Error:** `JEI/scripts/5_Mission/jei\jeimenu.c(478): Unknown operator '>>'`
+**Root cause:** Enforce Script has no bit shift operators.
+**Fix:** Replaced the computed color with a lookup of fixed hover colors.
+**Prevention:** No `<<` / `>>` and no ternary operator in Enforce Script; use arithmetic or lookups.
