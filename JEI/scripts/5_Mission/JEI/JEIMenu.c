@@ -473,7 +473,7 @@ class JEIMenu extends UIScriptedMenu
 	}
 
 	// Enforce Script has no shift operator: hover colors are listed per base color.
-	protected static int Lighten(int color)
+	protected int Lighten(int color)
 	{
 		switch (color)
 		{
