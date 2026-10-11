@@ -181,12 +181,15 @@ class JEIRegistry
 	{
 		TStringArray keys = new TStringArray;
 		map<string, JEIItemEntry> byKey = new map<string, JEIItemEntry>;
-		foreach (JEIItemEntry entry : s_Items)
+		// The index keeps keys unique: class names are case-insensitive in configs.
+		for (int i = 0; i < s_Items.Count(); i++)
 		{
+			JEIItemEntry entry = s_Items[i];
 			string key = entry.DisplayName + "|" + entry.ClassName;
 			key.ToLower();
+			key += "|" + i.ToString();
 			keys.Insert(key);
-			byKey.Insert(key, entry);
+			byKey.Set(key, entry);
 		}
 		keys.Sort();
 
@@ -227,7 +230,7 @@ class JEIRegistry
 		result.Clear();
 		foreach (JEIItemEntry entry : GetItems())
 		{
-			if (result.Find(entry.ModName) == -1)
+			if (entry && result.Find(entry.ModName) == -1)
 				result.Insert(entry.ModName);
 		}
 		result.Sort();
@@ -291,6 +294,8 @@ class JEIRegistry
 	{
 		foreach (JEIItemEntry entry : GetItems())
 		{
+			if (!entry)
+				continue;
 			if (result.Count() >= limit)
 				return;
 			if (IsRepairableWith(entry.ClassName, kitType))
@@ -339,6 +344,8 @@ class JEIRegistry
 		int added = 0;
 		foreach (JEIItemEntry entry : GetItems())
 		{
+			if (!entry)
+				continue;
 			if (added >= limit)
 				return;
 			if (GetGame().IsKindOf(entry.ClassName, cls))
@@ -352,10 +359,10 @@ class JEIRegistry
 	static string DescribeIngredient(string cls)
 	{
 		if (cls == "Inventory_Base" || cls == "ItemBase")
-			return "Any item";
+			return JEILang.T("ANY_ITEM");
 		if (GetItem(cls))
 			return GetDisplayName(cls);
-		return "Any " + cls;
+		return JEILang.F("ANY_OF", cls);
 	}
 
 	static string GetDisplayName(string cls)

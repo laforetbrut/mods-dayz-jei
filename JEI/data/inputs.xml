@@ -2,9 +2,9 @@
 <modded_inputs>
 	<inputs>
 		<actions>
-			<input name="UAJEIToggle" loc="Open / close JEI" />
+			<input name="UAJEIToggle" loc="STR_JEI_INPUT_TOGGLE" />
 		</actions>
-		<sorting name="jei" loc="JEI - Just Enough Items">
+		<sorting name="jei" loc="STR_JEI_INPUT_GROUP">
 			<input name="UAJEIToggle" />
 		</sorting>
 	</inputs>

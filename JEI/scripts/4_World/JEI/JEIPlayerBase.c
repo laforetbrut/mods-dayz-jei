@@ -51,9 +51,15 @@ modded class PlayerBase
 		}
 	}
 
+	// Identities are compared by id: the engine may hand over another instance.
 	protected bool JEI_IsValidSender(PlayerIdentity sender)
 	{
-		return GetGame().IsServer() && sender && sender == GetIdentity();
+		if (!GetGame().IsServer() || !sender || !GetIdentity())
+			return false;
+		bool valid = sender.GetId() == GetIdentity().GetId();
+		if (!valid)
+			Print("[JEI] Rejected RPC from another player");
+		return valid;
 	}
 
 	protected bool JEI_IsAdmin()
@@ -108,17 +114,20 @@ modded class PlayerBase
 			JEIEvents.OnSettingsReceived.Invoke();
 	}
 
-	protected void JEI_AdminReply(bool success, string message)
+	// Sends a translation key: each client shows the message in its own language.
+	protected void JEI_AdminReply(bool success, string key, string arg1 = "", string arg2 = "")
 	{
-		JEI_Log(message);
+		JEI_Log(string.Format("%1 %2 %3", key, arg1, arg2));
 		if (!GetGame().IsMultiplayer())
 		{
-			JEIEvents.OnAdminResult.Invoke(success, message);
+			JEIEvents.OnAdminResult.Invoke(success, key, arg1, arg2);
 			return;
 		}
 		ScriptRPC rpc = new ScriptRPC();
 		rpc.Write(success);
-		rpc.Write(message);
+		rpc.Write(key);
+		rpc.Write(arg1);
+		rpc.Write(arg2);
 		rpc.Send(this, JEI_RPC_ADMIN_RESULT, true, GetIdentity());
 	}
 
@@ -143,12 +152,12 @@ modded class PlayerBase
 	{
 		if (!JEI_IsAdmin())
 		{
-			JEI_AdminReply(false, "Denied: not a JEI admin.");
+			JEI_AdminReply(false, "ADM_DENIED");
 			return;
 		}
 		if (!JEIRegistry.ItemClassExists(cls))
 		{
-			JEI_AdminReply(false, "Unknown item class " + cls);
+			JEI_AdminReply(false, "ADM_UNKNOWN_ITEM", cls);
 			return;
 		}
 
@@ -159,7 +168,7 @@ modded class PlayerBase
 			if (JEICraftService.SpawnFor(this, cls))
 				spawned++;
 		}
-		JEI_AdminReply(spawned > 0, string.Format("Spawned %1 x %2", spawned, cls));
+		JEI_AdminReply(spawned > 0, "ADM_SPAWNED", spawned.ToString(), cls);
 	}
 
 	protected void JEI_ServerSaveRecipe(ParamsReadContext ctx)
@@ -175,19 +184,19 @@ modded class PlayerBase
 	{
 		if (!JEI_IsAdmin())
 		{
-			JEI_AdminReply(false, "Denied: not a JEI admin.");
+			JEI_AdminReply(false, "ADM_DENIED");
 			return;
 		}
 		if (!recipe.IsValid())
 		{
-			JEI_AdminReply(false, "Invalid recipe: a name, at least one ingredient A and one result are required.");
+			JEI_AdminReply(false, "ADM_INVALID");
 			return;
 		}
 		foreach (string result : recipe.Results)
 		{
 			if (!JEIRegistry.ItemClassExists(result))
 			{
-				JEI_AdminReply(false, "Unknown result class " + result);
+				JEI_AdminReply(false, "ADM_UNKNOWN_RESULT", result);
 				return;
 			}
 		}
@@ -203,7 +212,7 @@ modded class PlayerBase
 			settings.Save();
 		}
 
-		JEI_AdminReply(true, "Saved recipe " + recipe.Name);
+		JEI_AdminReply(true, "ADM_SAVED", recipe.Name);
 		JEI_BroadcastSettings();
 	}
 
@@ -219,7 +228,7 @@ modded class PlayerBase
 	{
 		if (!JEI_IsAdmin())
 		{
-			JEI_AdminReply(false, "Denied: not a JEI admin.");
+			JEI_AdminReply(false, "ADM_DENIED");
 			return;
 		}
 
@@ -227,7 +236,7 @@ modded class PlayerBase
 		JEICustomRecipe recipe = store.Find(name);
 		if (!recipe)
 		{
-			JEI_AdminReply(false, "No custom recipe named " + name);
+			JEI_AdminReply(false, "ADM_NO_CUSTOM", name);
 			return;
 		}
 
@@ -241,7 +250,7 @@ modded class PlayerBase
 
 		store.Remove(name);
 		store.Save();
-		JEI_AdminReply(true, "Deleted recipe " + name);
+		JEI_AdminReply(true, "ADM_DELETED", name);
 		JEI_BroadcastSettings();
 	}
 
@@ -257,12 +266,12 @@ modded class PlayerBase
 	{
 		if (!JEI_IsAdmin())
 		{
-			JEI_AdminReply(false, "Denied: not a JEI admin.");
+			JEI_AdminReply(false, "ADM_DENIED");
 			return;
 		}
 		if (!JEIRegistry.FindRecipe("v:" + recipeClass))
 		{
-			JEI_AdminReply(false, "Unknown recipe " + recipeClass);
+			JEI_AdminReply(false, "ADM_UNKNOWN_RECIPE", recipeClass);
 			return;
 		}
 
@@ -272,9 +281,9 @@ modded class PlayerBase
 		settings.Save();
 
 		if (disable)
-			JEI_AdminReply(true, "Disabled recipe " + recipeClass);
+			JEI_AdminReply(true, "ADM_DISABLED", recipeClass);
 		else
-			JEI_AdminReply(true, "Enabled recipe " + recipeClass);
+			JEI_AdminReply(true, "ADM_ENABLED", recipeClass);
 		JEI_BroadcastSettings();
 	}
 
@@ -303,10 +312,12 @@ modded class PlayerBase
 	protected void JEI_ClientAdminResult(ParamsReadContext ctx)
 	{
 		bool success;
-		string message;
-		if (!ctx.Read(success) || !ctx.Read(message))
+		string key;
+		string arg1;
+		string arg2;
+		if (!ctx.Read(success) || !ctx.Read(key) || !ctx.Read(arg1) || !ctx.Read(arg2))
 			return;
-		JEIEvents.OnAdminResult.Invoke(success, message);
+		JEIEvents.OnAdminResult.Invoke(success, key, arg1, arg2);
 	}
 
 	void JEI_RequestSettings()
@@ -322,6 +333,7 @@ modded class PlayerBase
 
 	void JEI_RequestCraft(string recipeKey, int count)
 	{
+		Print("[JEI] Sending craft request " + recipeKey + " x" + count);
 		if (!GetGame().IsMultiplayer())
 		{
 			int crafted = JEICraftService.Craft(this, recipeKey, count);

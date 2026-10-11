@@ -95,16 +95,26 @@ class JEICraftService
 	// Server side (or offline). Returns the number of successful crafts.
 	static int Craft(PlayerBase player, string recipeKey, int count)
 	{
+		Print("[JEI] Craft request " + recipeKey + " x" + count);
 		if (!player || !player.IsAlive() || player.IsUnconscious() || player.IsRestrained())
+		{
+			Print("[JEI] Craft refused: player cannot act");
 			return 0;
+		}
 
 		JEISettings settings = JEISettings.Get();
 		if (!settings.AllowCrafting)
+		{
+			Print("[JEI] Craft refused: AllowCrafting is false");
 			return 0;
+		}
 
 		JEIRecipe recipe = JEIRegistry.FindRecipe(recipeKey);
 		if (!recipe || recipe.IsDisabled())
+		{
+			Print("[JEI] Craft refused: unknown or disabled recipe " + recipeKey);
 			return 0;
+		}
 
 		string key = "local";
 		if (player.GetIdentity())
@@ -113,7 +123,10 @@ class JEICraftService
 		float now = GetGame().GetTickTime();
 		float last;
 		if (s_LastCraft.Find(key, last) && now - last < settings.CraftCooldown)
+		{
+			Print("[JEI] Craft refused: cooldown");
 			return 0;
+		}
 		s_LastCraft.Set(key, now);
 
 		PluginRecipesManager manager = PluginRecipesManager.Cast(GetPlugin(PluginRecipesManager));
@@ -131,7 +144,11 @@ class JEICraftService
 			ItemBase a;
 			ItemBase b;
 			if (!FindPair(recipe, player, items, true, a, b))
+			{
+				Print(string.Format("[JEI] No valid ingredient pair (%1 items scanned)", items.Count()));
 				break;
+			}
+			Print(string.Format("[JEI] Crafting with %1 + %2", a, b));
 
 			if (recipe.Vanilla)
 				manager.PerformRecipeServer(recipe.Vanilla.GetID(), a, b, player);
@@ -139,6 +156,7 @@ class JEICraftService
 				PerformCustom(recipe.Custom, a, b, player);
 			crafted++;
 		}
+		Print(string.Format("[JEI] Crafted %1 / %2", crafted, count));
 		return crafted;
 	}
 

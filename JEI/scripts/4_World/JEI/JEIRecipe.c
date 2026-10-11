@@ -118,7 +118,7 @@ class JEIRecipe
 		}
 
 		JEICustomRecipe made = new JEICustomRecipe();
-		made.Name = GetName() + " (custom)";
+		made.Name = JEILang.F("CUSTOM_SUFFIX", GetName());
 		if (GetIngredients(0))
 			made.IngredientsA.Copy(GetIngredients(0));
 		if (GetIngredients(1))

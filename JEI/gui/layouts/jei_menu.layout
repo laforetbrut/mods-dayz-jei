@@ -74,7 +74,7 @@ FrameWidgetClass JEIRoot {
      vexactsize 0
      ignorepointer 1
      color 0.6 0.62 0.66 1
-     text "Just Enough Items"
+     text "#STR_JEI_TITLE_SUB"
      font "gui/fonts/metron"
      "exact text" 1
      "exact text size" 16
@@ -130,7 +130,7 @@ FrameWidgetClass JEIRoot {
      vexactsize 0
      ignorepointer 1
      color 0.6 0.62 0.66 1
-     text "Search..."
+     text "#STR_JEI_SEARCH"
      font "gui/fonts/metron"
      "exact text" 1
      "exact text size" 15
@@ -156,7 +156,7 @@ FrameWidgetClass JEIRoot {
        vexactsize 0
        ignorepointer 1
        color 0.92 0.92 0.92 1
-       text "Sort: name"
+       text "#STR_JEI_SORT_NAME"
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 13
@@ -184,7 +184,7 @@ FrameWidgetClass JEIRoot {
        vexactsize 0
        ignorepointer 1
        color 0.92 0.92 0.92 1
-       text "All mods"
+       text "#STR_JEI_ALL_MODS"
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 13
@@ -212,7 +212,7 @@ FrameWidgetClass JEIRoot {
        vexactsize 0
        ignorepointer 1
        color 0.92 0.92 0.92 1
-       text "Craftable"
+       text ""
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 13
@@ -230,7 +230,7 @@ FrameWidgetClass JEIRoot {
      vexactsize 0
      ignorepointer 1
      color 0.6 0.62 0.66 1
-     text "Left click: how to craft    Right click: used in    Wheel: pages    @mod  =Class"
+     text "#STR_JEI_HINT"
      font "gui/fonts/metron"
      "exact text" 1
      "exact text size" 12
@@ -365,7 +365,7 @@ FrameWidgetClass JEIRoot {
      vexactsize 0
      ignorepointer 1
      color 0.92 0.92 0.92 1
-     text "Select an item"
+     text "#STR_JEI_SELECT_ITEM"
      font "gui/fonts/metron"
      "exact text" 1
      "exact text size" 22
@@ -423,7 +423,7 @@ FrameWidgetClass JEIRoot {
        vexactsize 0
        ignorepointer 1
        color 0.92 0.92 0.92 1
-       text "How to craft"
+       text ""
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 15
@@ -451,7 +451,7 @@ FrameWidgetClass JEIRoot {
        vexactsize 0
        ignorepointer 1
        color 0.92 0.92 0.92 1
-       text "Used in"
+       text ""
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 15
@@ -785,7 +785,7 @@ FrameWidgetClass JEIRoot {
        vexactsize 0
        ignorepointer 1
        color 0.92 0.92 0.92 1
-       text "Craft x1"
+       text ""
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 16
@@ -813,7 +813,7 @@ FrameWidgetClass JEIRoot {
        vexactsize 0
        ignorepointer 1
        color 0.92 0.92 0.92 1
-       text "Craft x10"
+       text ""
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 16
@@ -856,7 +856,7 @@ FrameWidgetClass JEIRoot {
        vexactsize 0
        ignorepointer 1
        color 0.9 0.4 0.4 1
-       text "ADMIN"
+       text "#STR_JEI_ADMIN"
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 12
@@ -882,7 +882,7 @@ FrameWidgetClass JEIRoot {
          vexactsize 0
          ignorepointer 1
          color 0.92 0.92 0.92 1
-         text "Give x1"
+         text ""
          font "gui/fonts/metron"
          "exact text" 1
          "exact text size" 14
@@ -910,7 +910,7 @@ FrameWidgetClass JEIRoot {
          vexactsize 0
          ignorepointer 1
          color 0.92 0.92 0.92 1
-         text "Give x10"
+         text ""
          font "gui/fonts/metron"
          "exact text" 1
          "exact text size" 14
@@ -938,7 +938,7 @@ FrameWidgetClass JEIRoot {
          vexactsize 0
          ignorepointer 1
          color 0.92 0.92 0.92 1
-         text "New recipe"
+         text "#STR_JEI_NEW_RECIPE"
          font "gui/fonts/metron"
          "exact text" 1
          "exact text size" 14
@@ -966,7 +966,7 @@ FrameWidgetClass JEIRoot {
          vexactsize 0
          ignorepointer 1
          color 0.92 0.92 0.92 1
-         text "Edit recipe"
+         text "#STR_JEI_EDIT_RECIPE"
          font "gui/fonts/metron"
          "exact text" 1
          "exact text size" 14
@@ -994,7 +994,7 @@ FrameWidgetClass JEIRoot {
          vexactsize 0
          ignorepointer 1
          color 0.92 0.92 0.92 1
-         text "Disable"
+         text "#STR_JEI_DISABLE"
          font "gui/fonts/metron"
          "exact text" 1
          "exact text size" 14
@@ -1025,7 +1025,7 @@ FrameWidgetClass JEIRoot {
        vexactsize 0
        ignorepointer 1
        color 0.86 0.55 0.18 1
-       text "Recipe editor"
+       text "#STR_JEI_EDITOR_TITLE"
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 20
@@ -1041,7 +1041,7 @@ FrameWidgetClass JEIRoot {
        vexactsize 0
        ignorepointer 1
        color 0.6 0.62 0.66 1
-       text "Class names separated by commas. Pick an item in the grid, then press + to add it."
+       text "#STR_JEI_EDITOR_HINT"
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 13
@@ -1057,7 +1057,7 @@ FrameWidgetClass JEIRoot {
        vexactsize 0
        ignorepointer 1
        color 0.92 0.92 0.92 1
-       text "Name"
+       text "#STR_JEI_NAME"
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 15
@@ -1085,7 +1085,7 @@ FrameWidgetClass JEIRoot {
        vexactsize 0
        ignorepointer 1
        color 0.92 0.92 0.92 1
-       text "Ingredient A"
+       text "#STR_JEI_INGREDIENT_A"
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 15
@@ -1151,7 +1151,7 @@ FrameWidgetClass JEIRoot {
          vexactsize 0
          ignorepointer 1
          color 0.92 0.92 0.92 1
-         text "Consume A: yes"
+         text ""
          font "gui/fonts/metron"
          "exact text" 1
          "exact text size" 13
@@ -1169,7 +1169,7 @@ FrameWidgetClass JEIRoot {
        vexactsize 0
        ignorepointer 1
        color 0.92 0.92 0.92 1
-       text "Ingredient B (optional)"
+       text "#STR_JEI_INGREDIENT_B"
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 15
@@ -1235,7 +1235,7 @@ FrameWidgetClass JEIRoot {
          vexactsize 0
          ignorepointer 1
          color 0.92 0.92 0.92 1
-         text "Consume B: yes"
+         text ""
          font "gui/fonts/metron"
          "exact text" 1
          "exact text size" 13
@@ -1253,7 +1253,7 @@ FrameWidgetClass JEIRoot {
        vexactsize 0
        ignorepointer 1
        color 0.92 0.92 0.92 1
-       text "Results"
+       text "#STR_JEI_RESULTS"
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 15
@@ -1319,7 +1319,7 @@ FrameWidgetClass JEIRoot {
          vexactsize 0
          ignorepointer 1
          color 0.92 0.92 0.92 1
-         text "Save"
+         text "#STR_JEI_SAVE"
          font "gui/fonts/metron"
          "exact text" 1
          "exact text size" 16
@@ -1347,7 +1347,7 @@ FrameWidgetClass JEIRoot {
          vexactsize 0
          ignorepointer 1
          color 0.92 0.92 0.92 1
-         text "Delete"
+         text "#STR_JEI_DELETE"
          font "gui/fonts/metron"
          "exact text" 1
          "exact text size" 16
@@ -1375,7 +1375,7 @@ FrameWidgetClass JEIRoot {
          vexactsize 0
          ignorepointer 1
          color 0.92 0.92 0.92 1
-         text "Cancel"
+         text "#STR_JEI_CANCEL"
          font "gui/fonts/metron"
          "exact text" 1
          "exact text size" 16

@@ -237,6 +237,12 @@ class JEIMenu extends UIScriptedMenu
 		JEIRegistry.GetModNames(m_ModNames);
 		if (s_ModFilter != "" && m_ModNames.Find(s_ModFilter) == -1)
 			s_ModFilter = "";
+		SetButtonText(m_BtnRecipes, JEILang.F("HOW_TO_CRAFT", "0"));
+		SetButtonText(m_BtnUses, JEILang.F("USED_IN", "0"));
+		SetConsume(true, true);
+		SetButtonText(m_BtnCraft1, JEILang.F("CRAFT_N", "1"));
+		SetButtonText(m_BtnGive1, JEILang.F("GIVE_N", "1"));
+		SetButtonText(m_BtnGive10, JEILang.F("GIVE_N", "10"));
 		RefreshAvailability();
 		ComputeCraftable();
 		UpdateSortButtons();
@@ -246,7 +252,7 @@ class JEIMenu extends UIScriptedMenu
 		UpdateAdminVisibility();
 		UpdateModeButtons();
 		ShowRecipe();
-		SetStatus("Loading recipes from server...", COLOR_MUTED);
+		SetStatus(JEILang.T("LOADING"), COLOR_MUTED);
 
 		PlayerBase player = PlayerBase.Cast(GetGame().GetPlayer());
 		if (player)
@@ -527,7 +533,7 @@ class JEIMenu extends UIScriptedMenu
 		else if (tile == m_SlotB)
 			slot = 1;
 		if (recipe && slot != -1)
-			m_TooltipInfo.SetText("Accepts: " + AcceptedList(recipe, slot));
+			m_TooltipInfo.SetText(JEILang.F("ACCEPTS", AcceptedList(recipe, slot)));
 		m_Tooltip.Show(true);
 		UpdateTooltipPosition();
 	}
@@ -646,17 +652,17 @@ class JEIMenu extends UIScriptedMenu
 		switch (s_SortMode)
 		{
 			case SORT_MOD:
-				SetButtonText(m_BtnSort, "Sort: mod");
+				SetButtonText(m_BtnSort, JEILang.T("SORT_MOD"));
 				break;
 			case SORT_CLASS:
-				SetButtonText(m_BtnSort, "Sort: class");
+				SetButtonText(m_BtnSort, JEILang.T("SORT_CLASS"));
 				break;
 			default:
-				SetButtonText(m_BtnSort, "Sort: name");
+				SetButtonText(m_BtnSort, JEILang.T("SORT_NAME"));
 				break;
 		}
 
-		SetButtonText(m_BtnCraftable, string.Format("Craftable (%1)", m_Craftable.Count()));
+		SetButtonText(m_BtnCraftable, JEILang.F("CRAFTABLE", JEILang.N(m_Craftable.Count())));
 		if (s_CraftableOnly)
 			SetButtonColor(m_BtnCraftable, COLOR_BTN_GO);
 		else
@@ -664,7 +670,7 @@ class JEIMenu extends UIScriptedMenu
 
 		if (s_ModFilter == "")
 		{
-			SetButtonText(m_BtnModFilter, "All mods");
+			SetButtonText(m_BtnModFilter, JEILang.T("ALL_MODS"));
 			SetButtonColor(m_BtnModFilter, COLOR_BTN);
 		}
 		else
@@ -801,7 +807,7 @@ class JEIMenu extends UIScriptedMenu
 				m_Filtered.Insert(entry);
 		}
 		SortFiltered();
-		m_ItemCount.SetText(string.Format("%1 / %2 items", m_Filtered.Count(), items.Count()));
+		m_ItemCount.SetText(JEILang.F2("ITEM_COUNT", JEILang.N(m_Filtered.Count()), JEILang.N(items.Count())));
 
 		int page = 0;
 		if (restorePage)
@@ -876,10 +882,10 @@ class JEIMenu extends UIScriptedMenu
 		JEIRegistry.FindRecipesFor(cls, true, usedIn, IsAdmin());
 
 		m_ItemName.SetText(JEIRegistry.GetDisplayName(cls));
-		m_ItemInfo.SetText("Mod: " + modName);
-		m_ItemInfo2.SetText("Class: " + cls);
-		SetButtonText(m_BtnRecipes, string.Format("How to craft (%1)", produce.Count()));
-		SetButtonText(m_BtnUses, string.Format("Used in (%1)", usedIn.Count()));
+		m_ItemInfo.SetText(JEILang.F("MOD", modName));
+		m_ItemInfo2.SetText(JEILang.F("CLASS", cls));
+		SetButtonText(m_BtnRecipes, JEILang.F("HOW_TO_CRAFT", JEILang.N(produce.Count())));
+		SetButtonText(m_BtnUses, JEILang.F("USED_IN", JEILang.N(usedIn.Count())));
 
 		UpdatePreview(cls);
 		UpdateModeButtons();
@@ -990,11 +996,11 @@ class JEIMenu extends UIScriptedMenu
 			foreach (JEITile empty : m_ResultTiles)
 				empty.Root.GetParent().Show(false);
 			if (m_SelectedClass == "")
-				m_NoRecipe.SetText("Click an item: left = how to craft it, right = what it is used in.");
+				m_NoRecipe.SetText(JEILang.T("CLICK_ITEM"));
 			else if (m_UsesMode)
-				m_NoRecipe.SetText("This item is not used in any recipe.");
+				m_NoRecipe.SetText(JEILang.T("NOT_USED"));
 			else
-				m_NoRecipe.SetText("No recipe crafts this item.");
+				m_NoRecipe.SetText(JEILang.T("NO_RECIPE"));
 			UpdateCraftState(null);
 			return;
 		}
@@ -1003,17 +1009,17 @@ class JEIMenu extends UIScriptedMenu
 		m_RecPageText.SetText(string.Format("%1 / %2", m_RecipeIndex + 1, m_ShownRecipes.Count()));
 		if (recipe.IsCustom())
 		{
-			m_RecipeTag.SetText("Custom recipe");
+			m_RecipeTag.SetText(JEILang.T("CUSTOM_RECIPE"));
 			m_RecipeTag.SetColor(COLOR_CUSTOM);
 		}
 		else if (recipe.IsDisabled())
 		{
-			m_RecipeTag.SetText("Disabled by an admin");
+			m_RecipeTag.SetText(JEILang.T("DISABLED_BY_ADMIN"));
 			m_RecipeTag.SetColor(COLOR_MISSING);
 		}
 		else
 		{
-			m_RecipeTag.SetText("Game recipe");
+			m_RecipeTag.SetText(JEILang.T("GAME_RECIPE"));
 			m_RecipeTag.SetColor(COLOR_MUTED);
 		}
 
@@ -1092,14 +1098,14 @@ class JEIMenu extends UIScriptedMenu
 			foreach (string name : names)
 			{
 				if (JEIRegistry.IsGenericIngredient(name))
-					return "Items this kit can repair";
+					return JEILang.T("KIT_REPAIRS");
 			}
 		}
 		if (names.Count() == 1)
 			return JEIRegistry.DescribeIngredient(names[0]);
 		if (names.Count() == 2)
-			return JEIRegistry.DescribeIngredient(names[0]) + " or " + JEIRegistry.DescribeIngredient(names[1]);
-		return string.Format("%1 or %2 other items", JEIRegistry.DescribeIngredient(names[0]), names.Count() - 1);
+			return JEILang.F2("OR", JEIRegistry.DescribeIngredient(names[0]), JEIRegistry.DescribeIngredient(names[1]));
+		return JEILang.F2("OR_MORE", JEIRegistry.DescribeIngredient(names[0]), JEILang.N(names.Count() - 1));
 	}
 
 	// Ingredient slots accepting several items cycle through them, like JEI.
@@ -1148,13 +1154,13 @@ class JEIMenu extends UIScriptedMenu
 		if (available)
 		{
 			tile.SetBaseColor(COLOR_TILE_OK);
-			state.SetText("In reach");
+			state.SetText(JEILang.T("IN_REACH"));
 			state.SetColor(COLOR_OK);
 		}
 		else
 		{
 			tile.SetBaseColor(COLOR_TILE_BAD);
-			state.SetText("Missing");
+			state.SetText(JEILang.T("MISSING"));
 			state.SetColor(COLOR_MISSING);
 		}
 	}
@@ -1162,7 +1168,7 @@ class JEIMenu extends UIScriptedMenu
 	protected void UpdateCraftState(JEIRecipe recipe)
 	{
 		JEISettings settings = JEISettings.Get();
-		SetButtonText(m_BtnCraftMax, string.Format("Craft x%1", settings.MaxCraftBatch));
+		SetButtonText(m_BtnCraftMax, JEILang.F("CRAFT_N", JEILang.N(settings.MaxCraftBatch)));
 
 		bool ready;
 		if (recipe)
@@ -1180,13 +1186,13 @@ class JEIMenu extends UIScriptedMenu
 		if (!recipe)
 			SetStatus("", COLOR_MUTED);
 		else if (recipe.IsDisabled())
-			SetStatus("This recipe is disabled.", COLOR_MISSING);
+			SetStatus(JEILang.T("STATUS_DISABLED"), COLOR_MISSING);
 		else if (!settings.AllowCrafting)
-			SetStatus("Crafting from JEI is disabled on this server.", COLOR_MISSING);
+			SetStatus(JEILang.T("STATUS_SERVER_OFF"), COLOR_MISSING);
 		else if (ready)
-			SetStatus("Everything is in reach: inventory and nearby storage.", COLOR_OK);
+			SetStatus(JEILang.T("STATUS_READY"), COLOR_OK);
 		else
-			SetStatus("Missing ingredients in your inventory and nearby storage.", COLOR_MISSING);
+			SetStatus(JEILang.T("STATUS_MISSING"), COLOR_MISSING);
 	}
 
 	protected void RequestCraft(int count)
@@ -1195,7 +1201,7 @@ class JEIMenu extends UIScriptedMenu
 		PlayerBase player = PlayerBase.Cast(GetGame().GetPlayer());
 		if (!recipe || !player)
 			return;
-		SetStatus("Crafting...", COLOR_MUTED);
+		SetStatus(JEILang.T("CRAFTING"), COLOR_MUTED);
 		player.JEI_RequestCraft(recipe.Key, count);
 	}
 
@@ -1218,11 +1224,11 @@ class JEIMenu extends UIScriptedMenu
 		if (!recipe)
 			return;
 		if (recipe.IsCustom())
-			SetButtonText(m_BtnToggleRecipe, "Delete");
+			SetButtonText(m_BtnToggleRecipe, JEILang.T("DELETE"));
 		else if (recipe.IsDisabled())
-			SetButtonText(m_BtnToggleRecipe, "Enable");
+			SetButtonText(m_BtnToggleRecipe, JEILang.T("ENABLE"));
 		else
-			SetButtonText(m_BtnToggleRecipe, "Disable");
+			SetButtonText(m_BtnToggleRecipe, JEILang.T("DISABLE"));
 	}
 
 	protected bool OnAdminClick(Widget w)
@@ -1247,18 +1253,18 @@ class JEIMenu extends UIScriptedMenu
 			JEICustomRecipe fresh = new JEICustomRecipe();
 			if (m_SelectedClass != "")
 				fresh.Results.Insert(m_SelectedClass);
-			OpenEditor(fresh, "", "New recipe");
+			OpenEditor(fresh, "", JEILang.T("NEW_RECIPE"));
 			return true;
 		}
 		if (w == m_BtnEditRecipe)
 		{
 			JEIRecipe selected = GetSelectedRecipe();
 			string oldName = "";
-			string title = "Replace game recipe (the original gets disabled)";
+			string title = JEILang.T("EDITOR_REPLACE");
 			if (selected.IsCustom())
 			{
 				oldName = selected.Custom.Name;
-				title = "Edit custom recipe";
+				title = JEILang.T("EDITOR_EDIT");
 			}
 			OpenEditor(selected.ToCustom(), oldName, title);
 			return true;
@@ -1305,15 +1311,15 @@ class JEIMenu extends UIScriptedMenu
 	{
 		m_EditConsumeA = consumeA;
 		m_EditConsumeB = consumeB;
-		SetButtonText(m_BtnConsumeA, "Consume A: " + YesNo(consumeA));
-		SetButtonText(m_BtnConsumeB, "Consume B: " + YesNo(consumeB));
+		SetButtonText(m_BtnConsumeA, JEILang.F("CONSUME_A", YesNo(consumeA)));
+		SetButtonText(m_BtnConsumeB, JEILang.F("CONSUME_B", YesNo(consumeB)));
 	}
 
 	protected static string YesNo(bool value)
 	{
 		if (value)
-			return "yes";
-		return "no";
+			return JEILang.T("YES");
+		return JEILang.T("NO");
 	}
 
 	protected void OpenEditor(JEICustomRecipe recipe, string oldName, string title)
@@ -1390,13 +1396,14 @@ class JEIMenu extends UIScriptedMenu
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(RefreshAvailability, 300, false);
 		m_CraftableTimer = CRAFTABLE_REFRESH - 0.5;
 		if (crafted > 0)
-			SetStatus(string.Format("Crafted %1 / %2.", crafted, requested), COLOR_OK);
+			SetStatus(JEILang.F2("CRAFTED", JEILang.N(crafted), JEILang.N(requested)), COLOR_OK);
 		else
-			SetStatus("Craft failed: missing or unusable ingredients, or too fast.", COLOR_MISSING);
+			SetStatus(JEILang.T("CRAFT_FAILED"), COLOR_MISSING);
 	}
 
-	protected void OnAdminResult(bool success, string message)
+	protected void OnAdminResult(bool success, string key, string arg1, string arg2)
 	{
+		string message = JEILang.F2(key, arg1, arg2);
 		int color = COLOR_MISSING;
 		if (success)
 		{
