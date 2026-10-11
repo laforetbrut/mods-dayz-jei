@@ -111,7 +111,7 @@ FrameWidgetClass JEIRoot {
     }
     EditBoxWidgetClass Search {
      position 0.012 0.068
-     size 0.25 0.045
+     size 0.17 0.045
      hexactpos 0
      vexactpos 0
      hexactsize 0
@@ -123,7 +123,7 @@ FrameWidgetClass JEIRoot {
     }
     TextWidgetClass SearchPlaceholder {
      position 0.02 0.068
-     size 0.24 0.045
+     size 0.16 0.045
      hexactpos 0
      vexactpos 0
      hexactsize 0
@@ -138,8 +138,8 @@ FrameWidgetClass JEIRoot {
      "text halign" left
     }
     PanelWidgetClass BtnSort {
-     position 0.268 0.068
-     size 0.105 0.045
+     position 0.188 0.068
+     size 0.093 0.045
      hexactpos 0
      vexactpos 0
      hexactsize 0
@@ -166,8 +166,8 @@ FrameWidgetClass JEIRoot {
      }
     }
     PanelWidgetClass BtnModFilter {
-     position 0.378 0.068
-     size 0.104 0.045
+     position 0.286 0.068
+     size 0.093 0.045
      hexactpos 0
      vexactpos 0
      hexactsize 0
@@ -185,6 +185,34 @@ FrameWidgetClass JEIRoot {
        ignorepointer 1
        color 0.92 0.92 0.92 1
        text "All mods"
+       font "gui/fonts/metron"
+       "exact text" 1
+       "exact text size" 13
+       "text valign" center
+       "text halign" center
+      }
+     }
+    }
+    PanelWidgetClass BtnCraftable {
+     position 0.384 0.068
+     size 0.098 0.045
+     hexactpos 0
+     vexactpos 0
+     hexactsize 0
+     vexactsize 0
+     color 0.17 0.18 0.2 1
+     style rover_sim_colorable
+     {
+      TextWidgetClass BtnCraftableText {
+       position 0 0
+       size 1 1
+       hexactpos 0
+       vexactpos 0
+       hexactsize 0
+       vexactsize 0
+       ignorepointer 1
+       color 0.92 0.92 0.92 1
+       text "Craftable"
        font "gui/fonts/metron"
        "exact text" 1
        "exact text size" 13

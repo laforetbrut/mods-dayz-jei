@@ -73,10 +73,11 @@ main_children = [
     button("BtnClose", 0.968, 0.01, 0.026, 0.037, "X", 16),
 
     # Left: item grid
-    editbox("Search", 0.012, 0.068, 0.25, 0.045),
-    text("SearchPlaceholder", 0.02, 0.068, 0.24, 0.045, "Search...", 15, MUTED),
-    button("BtnSort", 0.268, 0.068, 0.105, 0.045, "Sort: name", 13),
-    button("BtnModFilter", 0.378, 0.068, 0.104, 0.045, "All mods", 13),
+    editbox("Search", 0.012, 0.068, 0.17, 0.045),
+    text("SearchPlaceholder", 0.02, 0.068, 0.16, 0.045, "Search...", 15, MUTED),
+    button("BtnSort", 0.188, 0.068, 0.093, 0.045, "Sort: name", 13),
+    button("BtnModFilter", 0.286, 0.068, 0.093, 0.045, "All mods", 13),
+    button("BtnCraftable", 0.384, 0.068, 0.098, 0.045, "Craftable", 13),
     text("SearchHint", 0.012, 0.112, 0.47, 0.025, "Left click: how to craft    Right click: used in    Wheel: pages    @mod  =Class", 12, MUTED),
     panel("Grid", 0.012, 0.14, 0.47, 0.76, CARD),
     button("BtnPrev", 0.012, 0.91, 0.05, 0.045, "<", 18),

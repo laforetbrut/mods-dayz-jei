@@ -16,6 +16,7 @@ class JEIMenu extends UIScriptedMenu
 	protected const int INGREDIENT_EXAMPLES = 30;
 	protected const float CYCLE_TIME = 1.2;
 	protected const float AVAILABILITY_REFRESH = 1.0;
+	protected const float CRAFTABLE_REFRESH = 2.0;
 
 	protected const int SORT_NAME = 0;
 	protected const int SORT_MOD = 1;
@@ -67,6 +68,7 @@ class JEIMenu extends UIScriptedMenu
 	protected Widget m_BtnClose;
 	protected Widget m_BtnSort;
 	protected Widget m_BtnModFilter;
+	protected Widget m_BtnCraftable;
 	protected Widget m_BtnPrev;
 	protected Widget m_BtnNext;
 	protected Widget m_BtnRecipes;
@@ -115,6 +117,8 @@ class JEIMenu extends UIScriptedMenu
 	protected ref TStringArray m_OptionsA = new TStringArray;
 	protected ref TStringArray m_OptionsB = new TStringArray;
 	protected ref TStringArray m_ModNames = new TStringArray;
+	protected ref map<string, bool> m_Craftable = new map<string, bool>;
+	protected float m_CraftableTimer;
 
 	protected string m_SelectedClass;
 	protected string m_LastSearch = "#none";
@@ -134,6 +138,7 @@ class JEIMenu extends UIScriptedMenu
 	protected static int s_RememberedPage;
 	protected static int s_SortMode;
 	protected static string s_ModFilter;
+	protected static bool s_CraftableOnly;
 
 	// ------------------------------------------------------------------ init
 
@@ -181,6 +186,7 @@ class JEIMenu extends UIScriptedMenu
 		m_BtnClose     = SetupButton("BtnClose", COLOR_BTN);
 		m_BtnSort      = SetupButton("BtnSort", COLOR_BTN);
 		m_BtnModFilter = SetupButton("BtnModFilter", COLOR_BTN);
+		m_BtnCraftable = SetupButton("BtnCraftable", COLOR_BTN);
 		m_BtnPrev      = SetupButton("BtnPrev", COLOR_BTN);
 		m_BtnNext      = SetupButton("BtnNext", COLOR_BTN);
 		m_BtnRecipes   = SetupButton("BtnRecipes", COLOR_BTN);
@@ -211,7 +217,7 @@ class JEIMenu extends UIScriptedMenu
 		m_BtnDelete       = SetupButton("BtnDelete", COLOR_BTN_RED);
 		m_BtnCancel       = SetupButton("BtnCancel", COLOR_BTN);
 
-		if (!m_Search || !m_Grid || !m_RecipeCard || !m_Editor || !m_AdminPanel || !m_Status || !m_Tooltip || !m_BtnSort || !m_BtnModFilter)
+		if (!m_Search || !m_Grid || !m_RecipeCard || !m_Editor || !m_AdminPanel || !m_Status || !m_Tooltip || !m_BtnSort || !m_BtnModFilter || !m_BtnCraftable)
 		{
 			Print("[JEI] jei_menu.layout is missing widgets");
 			layoutRoot.Unlink();
@@ -231,6 +237,8 @@ class JEIMenu extends UIScriptedMenu
 		JEIRegistry.GetModNames(m_ModNames);
 		if (s_ModFilter != "" && m_ModNames.Find(s_ModFilter) == -1)
 			s_ModFilter = "";
+		RefreshAvailability();
+		ComputeCraftable();
 		UpdateSortButtons();
 
 		m_UsesMode = s_RememberedUses;
@@ -358,6 +366,14 @@ class JEIMenu extends UIScriptedMenu
 			UpdateSlotTiles();
 		}
 
+		// What can be crafted changes when the player moves or loots.
+		m_CraftableTimer += timeslice;
+		if (m_CraftableTimer >= CRAFTABLE_REFRESH)
+		{
+			m_CraftableTimer = 0;
+			RefreshCraftable();
+		}
+
 		m_AvailabilityTimer += timeslice;
 		if (m_AvailabilityTimer >= AVAILABILITY_REFRESH)
 		{
@@ -391,6 +407,8 @@ class JEIMenu extends UIScriptedMenu
 			CycleSort(step);
 		else if (w == m_BtnModFilter)
 			CycleModFilter(step);
+		else if (w == m_BtnCraftable)
+			ToggleCraftable();
 		else if (w == m_BtnPrev)
 			SetPage(m_Page - 1);
 		else if (w == m_BtnNext)
@@ -638,6 +656,12 @@ class JEIMenu extends UIScriptedMenu
 				break;
 		}
 
+		SetButtonText(m_BtnCraftable, string.Format("Craftable (%1)", m_Craftable.Count()));
+		if (s_CraftableOnly)
+			SetButtonColor(m_BtnCraftable, COLOR_BTN_GO);
+		else
+			SetButtonColor(m_BtnCraftable, COLOR_BTN);
+
 		if (s_ModFilter == "")
 		{
 			SetButtonText(m_BtnModFilter, "All mods");
@@ -648,6 +672,64 @@ class JEIMenu extends UIScriptedMenu
 			SetButtonText(m_BtnModFilter, s_ModFilter);
 			SetButtonColor(m_BtnModFilter, COLOR_BTN_ON);
 		}
+	}
+
+	// ------------------------------------------------------------ craftable
+
+	protected void ToggleCraftable()
+	{
+		s_CraftableOnly = !s_CraftableOnly;
+		RefreshAvailability();
+		ComputeCraftable();
+		UpdateSortButtons();
+		ApplyFilter(false);
+	}
+
+	// Results of every recipe whose ingredients are all in reach right now.
+	protected void ComputeCraftable()
+	{
+		m_Craftable.Clear();
+		PlayerBase player = PlayerBase.Cast(GetGame().GetPlayer());
+		if (!player)
+			return;
+
+		foreach (JEIRecipe recipe : JEIRegistry.GetRecipes())
+		{
+			if (recipe.IsDisabled())
+				continue;
+			ItemBase a;
+			ItemBase b;
+			if (!JEICraftService.FindPair(recipe, player, m_Available, false, a, b))
+				continue;
+			int results = recipe.GetResultCount();
+			for (int i = 0; i < results; i++)
+				m_Craftable.Set(recipe.GetResult(i), true);
+		}
+	}
+
+	protected void RefreshCraftable()
+	{
+		int before = m_Craftable.Count();
+		string signature = CraftableSignature();
+		ComputeCraftable();
+		bool changed = before != m_Craftable.Count() || signature != CraftableSignature();
+		if (!changed)
+			return;
+		UpdateSortButtons();
+		if (s_CraftableOnly)
+		{
+			int page = m_Page;
+			ApplyFilter(false);
+			SetPage(page);
+		}
+	}
+
+	protected string CraftableSignature()
+	{
+		string signature;
+		for (int i = 0; i < m_Craftable.Count(); i++)
+			signature += m_Craftable.GetKey(i) + ";";
+		return signature;
 	}
 
 	protected string SortKey(JEIItemEntry entry)
@@ -712,6 +794,8 @@ class JEIMenu extends UIScriptedMenu
 		foreach (JEIItemEntry entry : items)
 		{
 			if (s_ModFilter != "" && entry.ModName != s_ModFilter)
+				continue;
+			if (s_CraftableOnly && !m_Craftable.Contains(entry.ClassName))
 				continue;
 			if (Matches(entry, lower, modFilter, kindFilter))
 				m_Filtered.Insert(entry);
@@ -1304,6 +1388,7 @@ class JEIMenu extends UIScriptedMenu
 	{
 		// Let the inventory replicate before re-reading it.
 		GetGame().GetCallQueue(CALL_CATEGORY_GUI).CallLater(RefreshAvailability, 300, false);
+		m_CraftableTimer = CRAFTABLE_REFRESH - 0.5;
 		if (crafted > 0)
 			SetStatus(string.Format("Crafted %1 / %2.", crafted, requested), COLOR_OK);
 		else
