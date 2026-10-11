@@ -46,8 +46,8 @@ class JEITile
 	Widget Root;
 	protected ItemPreviewWidget m_Preview;
 	protected TextWidget m_Label;
-	protected EntityAI m_Entity;
 	protected string m_Class;
+	protected bool m_Pending;
 	protected int m_BaseColor;
 
 	void JEITile(Widget parent, ScriptedWidgetEventHandler handler, int baseColor)
@@ -60,9 +60,11 @@ class JEITile
 		Root.SetHandler(handler);
 	}
 
+	// Entities belong to JEIPreviewCache: a tile only detaches from them.
 	void ~JEITile()
 	{
-		ClearEntity();
+		if (m_Preview)
+			m_Preview.SetItem(null);
 		if (Root)
 			Root.Unlink();
 	}
@@ -86,45 +88,67 @@ class JEITile
 			Root.SetColor(m_BaseColor);
 	}
 
+	// Shows the class at once if its preview is cached, otherwise shows the name
+	// and waits for LoadPreview(), which the menu calls within a per-frame budget.
 	void SetClass(string cls)
 	{
 		if (cls == m_Class)
 			return;
 
-		ClearEntity();
 		m_Class = cls;
+		m_Pending = false;
+		m_Preview.SetItem(null);
 		Root.Show(cls != "");
 		if (cls == "")
 			return;
 
-		m_Entity = EntityAI.Cast(GetGame().CreateObjectEx(cls, vector.Zero, ECE_LOCAL | ECE_NOLIFETIME));
-		if (m_Entity)
-		{
-			m_Preview.Show(true);
-			m_Label.Show(false);
-			m_Preview.SetItem(m_Entity);
-			m_Preview.SetModelPosition(Vector(0, 0, 0.5));
-			m_Preview.SetModelOrientation(vector.Zero);
-			m_Preview.SetView(m_Entity.GetViewIndex());
-		}
+		EntityAI cached = JEIPreviewCache.Get().Find(cls);
+		if (cached)
+			ShowEntity(cached);
+		else if (JEIPreviewCache.Get().CannotSpawn(cls))
+			ShowName();
 		else
 		{
-			// Some classes cannot be spawned locally: show the name instead.
-			m_Preview.Show(false);
-			m_Label.Show(true);
-			m_Label.SetText(JEIRegistry.GetDisplayName(cls));
+			ShowName();
+			m_Pending = true;
 		}
 	}
 
-	protected void ClearEntity()
+	bool IsPending()
 	{
-		if (m_Preview)
-			m_Preview.SetItem(null);
-		if (m_Entity)
-		{
-			GetGame().ObjectDelete(m_Entity);
-			m_Entity = null;
-		}
-		m_Class = "";
+		return m_Pending;
+	}
+
+	// Spawns (or reuses) the preview. Returns true if an entity was spawned now.
+	bool LoadPreview()
+	{
+		if (!m_Pending)
+			return false;
+		m_Pending = false;
+
+		JEIPreviewCache cache = JEIPreviewCache.Get();
+		bool wasCached = cache.Find(m_Class) != null;
+		EntityAI entity = cache.Spawn(m_Class);
+		if (entity)
+			ShowEntity(entity);
+		return !wasCached;
+	}
+
+	protected void ShowEntity(EntityAI entity)
+	{
+		m_Label.Show(false);
+		m_Preview.Show(true);
+		m_Preview.SetItem(entity);
+		m_Preview.SetModelPosition(Vector(0, 0, 0.5));
+		m_Preview.SetModelOrientation(vector.Zero);
+		m_Preview.SetView(entity.GetViewIndex());
+	}
+
+	// Some classes cannot be spawned locally, and others are still loading.
+	protected void ShowName()
+	{
+		m_Preview.Show(false);
+		m_Label.Show(true);
+		m_Label.SetText(JEIRegistry.GetDisplayName(m_Class));
 	}
 }

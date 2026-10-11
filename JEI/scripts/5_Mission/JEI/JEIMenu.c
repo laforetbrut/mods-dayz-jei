@@ -17,6 +17,10 @@ class JEIMenu extends UIScriptedMenu
 	protected const float CYCLE_TIME = 1.2;
 	protected const float AVAILABILITY_REFRESH = 1.0;
 	protected const float CRAFTABLE_REFRESH = 2.0;
+	// Work spread over frames so the window never stalls.
+	protected const int PREVIEWS_PER_FRAME = 3;
+	protected const int CRAFTABLE_PER_FRAME = 12;
+	protected const float SEARCH_DELAY = 0.2;
 
 	protected const int SORT_NAME = 0;
 	protected const int SORT_MOD = 1;
@@ -119,6 +123,17 @@ class JEIMenu extends UIScriptedMenu
 	protected ref TStringArray m_ModNames = new TStringArray;
 	protected ref map<string, bool> m_Craftable = new map<string, bool>;
 	protected float m_CraftableTimer;
+	protected ref map<string, bool> m_CraftableNext = new map<string, bool>;
+	protected ref array<JEIRecipe> m_CraftScan = new array<JEIRecipe>;
+	protected ref array<ItemBase> m_CraftItems = new array<ItemBase>;
+	protected ref TStringArray m_CraftTypes = new TStringArray;
+	protected int m_CraftScanIndex = -1;
+	protected bool m_CraftScanForced;
+	protected string m_AvailableSignature;
+	protected ref array<JEIRecipe> m_Produce = new array<JEIRecipe>;
+	protected ref array<JEIRecipe> m_UsedIn = new array<JEIRecipe>;
+	protected bool m_SearchPending;
+	protected float m_SearchTimer;
 
 	protected string m_SelectedClass;
 	protected string m_LastSearch = "#none";
@@ -244,7 +259,7 @@ class JEIMenu extends UIScriptedMenu
 		SetButtonText(m_BtnGive1, JEILang.F("GIVE_N", "1"));
 		SetButtonText(m_BtnGive10, JEILang.F("GIVE_N", "10"));
 		RefreshAvailability();
-		ComputeCraftable();
+		StartCraftableScan(true);
 		UpdateSortButtons();
 
 		m_UsesMode = s_RememberedUses;
@@ -352,6 +367,7 @@ class JEIMenu extends UIScriptedMenu
 			return;
 		}
 
+		// Typing only restarts a short timer; the grid is filtered once typing pauses.
 		string search = m_Search.GetText();
 		if (search != m_LastSearch)
 		{
@@ -359,8 +375,26 @@ class JEIMenu extends UIScriptedMenu
 			m_LastSearch = search;
 			if (m_SearchPlaceholder)
 				m_SearchPlaceholder.Show(search == "");
-			ApplyFilter(firstFilter);
+			if (firstFilter)
+				ApplyFilter(true);
+			else
+			{
+				m_SearchPending = true;
+				m_SearchTimer = 0;
+			}
 		}
+		if (m_SearchPending)
+		{
+			m_SearchTimer += timeslice;
+			if (m_SearchTimer >= SEARCH_DELAY)
+			{
+				m_SearchPending = false;
+				ApplyFilter(false);
+			}
+		}
+
+		LoadPendingPreviews();
+		StepCraftableScan();
 
 		UpdateTooltipPosition();
 
@@ -377,7 +411,7 @@ class JEIMenu extends UIScriptedMenu
 		if (m_CraftableTimer >= CRAFTABLE_REFRESH)
 		{
 			m_CraftableTimer = 0;
-			RefreshCraftable();
+			StartCraftableScan(false);
 		}
 
 		m_AvailabilityTimer += timeslice;
@@ -685,58 +719,156 @@ class JEIMenu extends UIScriptedMenu
 	protected void ToggleCraftable()
 	{
 		s_CraftableOnly = !s_CraftableOnly;
-		RefreshAvailability();
-		ComputeCraftable();
 		UpdateSortButtons();
 		ApplyFilter(false);
+		RefreshAvailability();
+		StartCraftableScan(true);
 	}
 
-	// Results of every recipe whose ingredients are all in reach right now.
-	protected void ComputeCraftable()
+	// Starts a scan of every recipe against a snapshot of the items in reach.
+	// Skipped when nothing in reach changed since the last scan.
+	protected void StartCraftableScan(bool force)
 	{
-		m_Craftable.Clear();
-		PlayerBase player = PlayerBase.Cast(GetGame().GetPlayer());
-		if (!player)
+		if (m_CraftScanIndex != -1)
+		{
+			m_CraftScanForced = m_CraftScanForced || force;
 			return;
+		}
 
+		string signature = AvailableSignature();
+		if (!force && signature == m_AvailableSignature)
+			return;
+		m_AvailableSignature = signature;
+
+		m_CraftScan.Clear();
 		array<ref JEIRecipe> recipes = JEIRegistry.GetRecipes();
 		foreach (JEIRecipe recipe : recipes)
 		{
-			if (!recipe || recipe.IsDisabled())
+			if (recipe && !recipe.IsDisabled())
+				m_CraftScan.Insert(recipe);
+		}
+
+		m_CraftItems.Clear();
+		m_CraftTypes.Clear();
+		foreach (ItemBase item : m_Available)
+		{
+			if (!item)
+				continue;
+			m_CraftItems.Insert(item);
+			string type = item.GetType();
+			if (m_CraftTypes.Find(type) == -1)
+				m_CraftTypes.Insert(type);
+		}
+
+		m_CraftableNext.Clear();
+		m_CraftScanForced = false;
+		m_CraftScanIndex = 0;
+	}
+
+	// A few recipes per frame. Cheap type test first, the game's check only
+	// for recipes whose every slot has a matching item type in reach.
+	protected void StepCraftableScan()
+	{
+		if (m_CraftScanIndex == -1)
+			return;
+
+		PlayerBase player = PlayerBase.Cast(GetGame().GetPlayer());
+		int end = Math.Min(m_CraftScanIndex + CRAFTABLE_PER_FRAME, m_CraftScan.Count());
+		for (int i = m_CraftScanIndex; i < end; i++)
+		{
+			JEIRecipe recipe = m_CraftScan[i];
+			if (!recipe || !player || !SlotHasType(recipe, 0) || !SlotHasType(recipe, 1))
 				continue;
 			ItemBase a;
 			ItemBase b;
-			if (!JEICraftService.FindPair(recipe, player, m_Available, true, a, b))
+			if (!JEICraftService.FindPair(recipe, player, m_CraftItems, true, a, b))
 				continue;
 			int results = recipe.GetResultCount();
-			for (int i = 0; i < results; i++)
-				m_Craftable.Set(recipe.GetResult(i), true);
+			for (int r = 0; r < results; r++)
+				m_CraftableNext.Set(recipe.GetResult(r), true);
 		}
-	}
-
-	protected void RefreshCraftable()
-	{
-		int before = m_Craftable.Count();
-		string signature = CraftableSignature();
-		ComputeCraftable();
-		bool changed = before != m_Craftable.Count() || signature != CraftableSignature();
-		if (!changed)
+		m_CraftScanIndex = end;
+		if (m_CraftScanIndex < m_CraftScan.Count())
 			return;
-		UpdateSortButtons();
-		if (s_CraftableOnly)
+
+		m_CraftScanIndex = -1;
+		bool changed = !SameKeys(m_Craftable, m_CraftableNext);
+		m_Craftable.Clear();
+		for (int k = 0; k < m_CraftableNext.Count(); k++)
+			m_Craftable.Set(m_CraftableNext.GetKey(k), true);
+
+		if (changed)
 		{
-			int page = m_Page;
-			ApplyFilter(false);
-			SetPage(page);
+			UpdateSortButtons();
+			if (s_CraftableOnly)
+			{
+				int page = m_Page;
+				ApplyFilter(false);
+				SetPage(page);
+			}
 		}
+		if (m_CraftScanForced)
+			StartCraftableScan(true);
 	}
 
-	protected string CraftableSignature()
+	protected bool SlotHasType(JEIRecipe recipe, int slot)
 	{
-		string signature;
-		for (int i = 0; i < m_Craftable.Count(); i++)
-			signature += m_Craftable.GetKey(i) + ";";
+		if (!recipe.IsSlotUsed(slot))
+			return true;
+		TStringArray names = recipe.GetIngredients(slot);
+		foreach (string type : m_CraftTypes)
+		{
+			if (JEIRegistry.IsKindOfAny(type, names))
+				return true;
+		}
+		return false;
+	}
+
+	protected static bool SameKeys(map<string, bool> a, map<string, bool> b)
+	{
+		if (a.Count() != b.Count())
+			return false;
+		for (int i = 0; i < a.Count(); i++)
+		{
+			if (!b.Contains(a.GetKey(i)))
+				return false;
+		}
+		return true;
+	}
+
+	protected string AvailableSignature()
+	{
+		string signature = JEILang.N(m_Available.Count());
+		foreach (ItemBase item : m_Available)
+		{
+			if (!item)
+				continue;
+			int quantity = item.GetQuantity();
+			signature += ";" + item.GetType() + JEILang.N(quantity);
+		}
 		return signature;
+	}
+
+	// Spawns a few missing 3D previews per frame, recipe slots first.
+	protected void LoadPendingPreviews()
+	{
+		int budget = PREVIEWS_PER_FRAME;
+		if (m_SlotA.IsPending() && m_SlotA.LoadPreview())
+			budget--;
+		if (m_SlotB.IsPending() && m_SlotB.LoadPreview())
+			budget--;
+		foreach (JEITile result : m_ResultTiles)
+		{
+			if (result.IsPending() && result.LoadPreview())
+				budget--;
+		}
+		foreach (JEITile tile : m_GridTiles)
+		{
+			if (budget <= 0)
+				return;
+			if (tile.IsPending() && tile.LoadPreview())
+				budget--;
+		}
 	}
 
 	protected string SortKey(JEIItemEntry entry)
@@ -826,7 +958,7 @@ class JEIMenu extends UIScriptedMenu
 	protected bool Matches(JEIItemEntry entry, string lower, string modFilter, string kindFilter)
 	{
 		if (kindFilter != "")
-			return entry.ClassName == kindFilter || GetGame().IsKindOf(entry.ClassName, kindFilter);
+			return JEIRegistry.IsKindOf(entry.ClassName, kindFilter);
 
 		if (modFilter != "")
 		{
@@ -877,16 +1009,15 @@ class JEIMenu extends UIScriptedMenu
 		if (entry)
 			modName = entry.ModName;
 
-		array<JEIRecipe> produce = new array<JEIRecipe>;
-		array<JEIRecipe> usedIn = new array<JEIRecipe>;
-		JEIRegistry.FindRecipesFor(cls, false, produce, IsAdmin());
-		JEIRegistry.FindRecipesFor(cls, true, usedIn, IsAdmin());
+		// Both lists are computed once per click and reused by the tabs.
+		JEIRegistry.FindRecipesFor(cls, false, m_Produce, IsAdmin());
+		JEIRegistry.FindRecipesFor(cls, true, m_UsedIn, IsAdmin());
 
 		m_ItemName.SetText(JEIRegistry.GetDisplayName(cls));
 		m_ItemInfo.SetText(JEILang.F("MOD", modName));
 		m_ItemInfo2.SetText(JEILang.F("CLASS", cls));
-		SetButtonText(m_BtnRecipes, JEILang.F("HOW_TO_CRAFT", JEILang.N(produce.Count())));
-		SetButtonText(m_BtnUses, JEILang.F("USED_IN", JEILang.N(usedIn.Count())));
+		SetButtonText(m_BtnRecipes, JEILang.F("HOW_TO_CRAFT", JEILang.N(m_Produce.Count())));
+		SetButtonText(m_BtnUses, JEILang.F("USED_IN", JEILang.N(m_UsedIn.Count())));
 
 		UpdatePreview(cls);
 		UpdateModeButtons();
@@ -919,7 +1050,7 @@ class JEIMenu extends UIScriptedMenu
 	protected void UpdatePreview(string cls)
 	{
 		ClearPreview();
-		m_PreviewEntity = EntityAI.Cast(GetGame().CreateObjectEx(cls, vector.Zero, ECE_LOCAL | ECE_NOLIFETIME));
+		m_PreviewEntity = JEIPreviewCache.Get().Spawn(cls);
 		if (m_PreviewEntity)
 		{
 			m_Preview.SetItem(m_PreviewEntity);
@@ -931,13 +1062,10 @@ class JEIMenu extends UIScriptedMenu
 
 	protected void ClearPreview()
 	{
+		// The entity belongs to JEIPreviewCache.
 		if (m_Preview)
 			m_Preview.SetItem(null);
-		if (m_PreviewEntity)
-		{
-			GetGame().ObjectDelete(m_PreviewEntity);
-			m_PreviewEntity = null;
-		}
+		m_PreviewEntity = null;
 	}
 
 	// --------------------------------------------------------------- recipes
@@ -946,9 +1074,13 @@ class JEIMenu extends UIScriptedMenu
 	{
 		m_ShownRecipes.Clear();
 		if (m_SelectedClass != "")
-			JEIRegistry.FindRecipesFor(m_SelectedClass, m_UsesMode, m_ShownRecipes, IsAdmin());
+		{
+			if (m_UsesMode)
+				m_ShownRecipes.Copy(m_UsedIn);
+			else
+				m_ShownRecipes.Copy(m_Produce);
+		}
 		m_RecipeIndex = 0;
-		RefreshAvailability();
 		ShowRecipe();
 	}
 

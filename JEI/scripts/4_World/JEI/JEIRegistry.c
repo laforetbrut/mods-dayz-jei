@@ -28,6 +28,27 @@ class JEIRegistry
 	protected static ref map<string, JEIItemEntry> s_ItemByClass;
 	protected static ref map<string, string> s_DisplayCache = new map<string, string>;
 
+	// Config lookups are slow and never change during a session: cache them all.
+	protected static ref map<string, bool> s_KindCache = new map<string, bool>;
+	protected static ref map<string, string> s_PathCache = new map<string, string>;
+	protected static ref map<string, int> s_KitTypeCache = new map<string, int>;
+	protected static ref map<string, bool> s_RepairCache = new map<string, bool>;
+	protected static ref map<string, ref TStringArray> s_ExpandCache = new map<string, ref TStringArray>;
+	protected static ref map<int, ref TStringArray> s_RepairListCache = new map<int, ref TStringArray>;
+
+	static bool IsKindOf(string cls, string base)
+	{
+		if (cls == base)
+			return true;
+		string key = cls + "|" + base;
+		bool result;
+		if (s_KindCache.Find(key, result))
+			return result;
+		result = GetGame().IsKindOf(cls, base);
+		s_KindCache.Set(key, result);
+		return result;
+	}
+
 	// ---------------------------------------------------------------- recipes
 
 	static void OnRecipeRegistered(RecipeBase recipe)
@@ -98,7 +119,7 @@ class JEIRegistry
 			return false;
 		foreach (string name : names)
 		{
-			if (cls == name || GetGame().IsKindOf(cls, name))
+			if (IsKindOf(cls, name))
 				return true;
 		}
 		return false;
@@ -151,6 +172,8 @@ class JEIRegistry
 	// Called again after the server settings arrive, to apply HiddenItems.
 	static void BuildItemIndex()
 	{
+		s_ExpandCache.Clear();
+		s_RepairListCache.Clear();
 		s_Items = new array<ref JEIItemEntry>;
 		s_ItemByClass = new map<string, JEIItemEntry>;
 
@@ -272,13 +295,34 @@ class JEIRegistry
 
 	static string ConfigPath(string cls)
 	{
+		string path;
+		if (s_PathCache.Find(cls, path))
+			return path;
+		path = "";
 		TStringArray roots = {"CfgVehicles", "CfgWeapons", "CfgMagazines"};
 		foreach (string root : roots)
 		{
 			if (GetGame().ConfigIsExisting(root + " " + cls))
-				return root + " " + cls;
+			{
+				path = root + " " + cls;
+				break;
+			}
 		}
-		return "";
+		s_PathCache.Set(cls, path);
+		return path;
+	}
+
+	static int GetClassKitType(string cls)
+	{
+		int kitType;
+		if (s_KitTypeCache.Find(cls, kitType))
+			return kitType;
+		kitType = 0;
+		string path = ConfigPath(cls);
+		if (path != "")
+			kitType = GetGame().ConfigGetInt(path + " repairKitType");
+		s_KitTypeCache.Set(cls, kitType);
+		return kitType;
 	}
 
 	// Repair kit type of the first kit found in an ingredient list, 0 if none.
@@ -288,10 +332,7 @@ class JEIRegistry
 			return 0;
 		foreach (string name : names)
 		{
-			string path = ConfigPath(name);
-			if (path == "")
-				continue;
-			int kitType = GetGame().ConfigGetInt(path + " repairKitType");
+			int kitType = GetClassKitType(name);
 			if (kitType > 0)
 				return kitType;
 		}
@@ -300,26 +341,42 @@ class JEIRegistry
 
 	static bool IsRepairableWith(string cls, int kitType)
 	{
-		string path = ConfigPath(cls);
-		if (path == "" || kitType <= 0)
+		if (kitType <= 0)
 			return false;
-		TIntArray kits = new TIntArray;
-		GetGame().ConfigGetIntArray(path + " repairableWithKits", kits);
-		return kits.Find(kitType) != -1;
+		string key = cls + "|" + kitType.ToString();
+		bool result;
+		if (s_RepairCache.Find(key, result))
+			return result;
+
+		result = false;
+		string path = ConfigPath(cls);
+		if (path != "")
+		{
+			TIntArray kits = new TIntArray;
+			GetGame().ConfigGetIntArray(path + " repairableWithKits", kits);
+			result = kits.Find(kitType) != -1;
+		}
+		s_RepairCache.Set(key, result);
+		return result;
 	}
 
 	static void ItemsRepairableWith(int kitType, TStringArray result, int limit)
 	{
-		array<ref JEIItemEntry> items = GetItems();
-		foreach (JEIItemEntry entry : items)
+		TStringArray list;
+		if (!s_RepairListCache.Find(kitType, list))
 		{
-			if (!entry)
-				continue;
-			if (result.Count() >= limit)
-				return;
-			if (IsRepairableWith(entry.ClassName, kitType))
-				result.Insert(entry.ClassName);
+			list = new TStringArray;
+			array<ref JEIItemEntry> items = GetItems();
+			foreach (JEIItemEntry entry : items)
+			{
+				if (entry && IsRepairableWith(entry.ClassName, kitType))
+					list.Insert(entry.ClassName);
+			}
+			s_RepairListCache.Set(kitType, list);
 		}
+		int count = Math.Min(limit, list.Count());
+		for (int i = 0; i < count; i++)
+			result.Insert(list[i]);
 	}
 
 	// Whether cls really fits a slot, taking generic ingredients into account.
@@ -335,7 +392,7 @@ class JEIRegistry
 				generic = true;
 				continue;
 			}
-			if (cls == name || GetGame().IsKindOf(cls, name))
+			if (IsKindOf(cls, name))
 				return true;
 		}
 		if (!generic)
@@ -360,20 +417,23 @@ class JEIRegistry
 			result.Insert(cls);
 			return;
 		}
-		int added = 0;
-		array<ref JEIItemEntry> items = GetItems();
-		foreach (JEIItemEntry entry : items)
+
+		// Scanning the whole index is expensive: do it once per base class.
+		TStringArray list;
+		if (!s_ExpandCache.Find(cls, list))
 		{
-			if (!entry)
-				continue;
-			if (added >= limit)
-				return;
-			if (GetGame().IsKindOf(entry.ClassName, cls))
+			list = new TStringArray;
+			array<ref JEIItemEntry> items = GetItems();
+			foreach (JEIItemEntry entry : items)
 			{
-				result.Insert(entry.ClassName);
-				added++;
+				if (entry && IsKindOf(entry.ClassName, cls))
+					list.Insert(entry.ClassName);
 			}
+			s_ExpandCache.Set(cls, list);
 		}
+		int count = Math.Min(limit, list.Count());
+		for (int i = 0; i < count; i++)
+			result.Insert(list[i]);
 	}
 
 	static string DescribeIngredient(string cls)

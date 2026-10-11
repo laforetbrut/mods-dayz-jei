@@ -14,6 +14,8 @@ class JEICraftService
 		{
 			if (result.Count() >= MAX_CANDIDATES)
 				return;
+			if (!item)
+				continue;
 			string type = item.GetType();
 			bool fits;
 			if (strict)
@@ -93,6 +95,8 @@ class JEICraftService
 		{
 			if (hasA && hasB)
 				return;
+			if (!item)
+				continue;
 			string type = item.GetType();
 			if (!hasA && JEIRegistry.FitsSlot(type, namesA, namesB))
 				hasA = true;

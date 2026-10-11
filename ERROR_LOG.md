@@ -41,3 +41,10 @@
 **Root cause:** Read in the vanilla scripts (dta/scripts.pbo): `RecipeBase.CheckRecipe` rejects any recipe not flagged "anywhere" when neither ingredient is in the player's hands. `PerformRecipeServer` also re-sorts ingredients through its cache and runs a sanity check.
 **Fix:** `RecipeBase.JEI_Check` / `JEI_Perform` sort the items with `CheckIngredientMatch`, lift only the hands rule through `IsRecipeAnywhere` while JEI runs, then call `CheckRecipe` / `PerformRecipe` so every other vanilla condition still applies.
 **Prevention:** Check the vanilla source (extract dta/scripts.pbo) before calling engine helpers; do not guess their preconditions.
+
+## [2026-10-11 22:45] — Small freezes while browsing the JEI window
+**Context:** Changing pages, clicking items, typing in the search box, Craftable filter on.
+**Error:** Short frame stalls during navigation.
+**Root cause:** Every page change deleted and spawned 72 preview entities in one frame; the Craftable filter checked 300+ recipes with the game's recipe check in one frame every 2 s; IsKindOf and config reads were repeated thousands of times; each click computed the recipe lists three times and rescanned the area; the grid was filtered on every keystroke.
+**Fix:** LRU cache of preview entities spawned 3 per frame; Craftable scan sliced over frames with a type prefilter and skipped when nothing in reach changed; caches for IsKindOf, config paths, kit types and ingredient expansion; recipe lists computed once per click; search debounced.
+**Prevention:** In UI code never spawn entities or run recipe checks in bulk in one frame; cache config lookups; spread work with a per-frame budget.
