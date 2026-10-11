@@ -1,0 +1,53 @@
+[h1]JEI - Just Enough Items[/h1]
+A recipe browser for DayZ inspired by the Minecraft mod JEI. Press [b]J[/b], find any item, see how it is crafted and what it is used in, then craft it straight from your inventory and the storage around you.
+
+[h2]Features[/h2]
+[list]
+[*][b]Configurable key[/b] (default J), in Options > Controls > JEI.
+[*][b]Every item of every loaded mod[/b] in a 3D icon grid with tooltips.
+[*][b]Automatic recipe detection[/b]: vanilla recipes and recipes added by other mods, no compatibility patch needed.
+[*][b]How to craft / Used in[/b]: left click an item for its recipes, right click for its uses. Ingredients accepting several items cycle through them.
+[*][b]Quick craft[/b] from your inventory, loose items, open containers, tents, barrels and vehicle cargo nearby. No item needed in hands.
+[*][b]Craftable filter[/b]: lists only what you can craft right now with what is around you.
+[*][b]Sort and filter[/b] by name, mod or class, one mod at a time, search with [i]text[/i], [i]@mod[/i] or [i]=BaseClass[/i].
+[*][b]Server authoritative[/b]: the server rescans the area itself and runs the game's own recipe checks (quantity, condition, attachments).
+[*][b]Admin tools[/b]: spawn items, create custom recipes, replace, disable or re-enable any game recipe.
+[*][b]13 languages[/b]: English, French, German, Spanish, Italian, Portuguese, Russian, Polish, Czech, Hungarian, Japanese, Chinese (simplified and traditional).
+[/list]
+
+[h2]Server setup[/h2]
+[list]
+[*]Load the mod on the server and the clients, copy the key from [i]keys[/i] into the server [i]keys[/i] folder.
+[*]Settings are created on first start in [i]profiles/JEI/settings.json[/i]: crafting on/off, search radius, batch size, cooldown, blacklisted recipes, hidden items.
+[*]Add Steam64 IDs to [i]Admins[/i] to give access to the admin tools. Custom recipes are saved in [i]profiles/JEI/custom_recipes.json[/i].
+[/list]
+
+Author: vyrriox
+
+[hr][/hr]
+
+[h1]JEI - Just Enough Items (FR)[/h1]
+Un navigateur de recettes pour DayZ inspiré du mod Minecraft JEI. Appuie sur [b]J[/b], trouve n'importe quel objet, vois comment le fabriquer et à quoi il sert, puis fabrique-le directement depuis ton inventaire et les stockages autour de toi.
+
+[h2]Fonctionnalités[/h2]
+[list]
+[*][b]Touche configurable[/b] (J par défaut), dans Options > Contrôles > JEI.
+[*][b]Tous les objets de tous les mods[/b] dans une grille d'icônes 3D avec info-bulles.
+[*][b]Détection automatique des recettes[/b] : vanilla et ajoutées par d'autres mods, sans patch de compatibilité.
+[*][b]Comment fabriquer / Utilisé dans[/b] : clic gauche pour les recettes, clic droit pour les utilisations.
+[*][b]Craft rapide[/b] depuis l'inventaire, le sol, les conteneurs ouverts, tentes, barils et véhicules proches, sans rien tenir en main.
+[*][b]Filtre Craftable[/b] : seulement ce que tu peux fabriquer tout de suite.
+[*][b]Tri et filtres[/b] par nom, mod ou classe, recherche [i]texte[/i], [i]@mod[/i] ou [i]=Classe[/i].
+[*][b]Autorité serveur[/b] : le serveur vérifie tout avec les règles du jeu.
+[*][b]Outils admin[/b] : faire apparaître des objets, créer, remplacer, désactiver des recettes.
+[*][b]13 langues[/b].
+[/list]
+
+[h2]Installation serveur[/h2]
+[list]
+[*]Charger le mod sur le serveur et les clients, copier la clé du dossier [i]keys[/i] dans le dossier [i]keys[/i] du serveur.
+[*]Les réglages sont créés au premier démarrage dans [i]profiles/JEI/settings.json[/i].
+[*]Ajouter les Steam64 dans [i]Admins[/i] pour les outils admin.
+[/list]
+
+Auteur : vyrriox
