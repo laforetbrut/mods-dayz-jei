@@ -71,8 +71,16 @@ class JEIRecipeStore
 
 	void Load()
 	{
+		// Never load into "this": the loader replaces its target and may null it.
 		if (FileExist(JEI_RECIPES_FILE))
-			JsonFileLoader<JEIRecipeStore>.JsonLoadFile(JEI_RECIPES_FILE, this);
+		{
+			JEIRecipeStore loaded = new JEIRecipeStore();
+			JsonFileLoader<JEIRecipeStore>.JsonLoadFile(JEI_RECIPES_FILE, loaded);
+			if (loaded && loaded.Recipes)
+				Recipes = loaded.Recipes;
+			else
+				Print("[JEI] Cannot read " + JEI_RECIPES_FILE + ", starting empty");
+		}
 		if (!Recipes)
 			Recipes = new array<ref JEICustomRecipe>;
 		Save();

@@ -1185,6 +1185,8 @@ class JEIMenu extends UIScriptedMenu
 
 		if (!recipe)
 			SetStatus("", COLOR_MUTED);
+		else if (!JEISettings.IsSynced())
+			SetStatus(JEILang.T("LOADING"), COLOR_MUTED);
 		else if (recipe.IsDisabled())
 			SetStatus(JEILang.T("STATUS_DISABLED"), COLOR_MISSING);
 		else if (!settings.AllowCrafting)

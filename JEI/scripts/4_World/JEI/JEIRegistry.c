@@ -116,6 +116,11 @@ class JEIRegistry
 	{
 		if (!s_Items)
 			BuildItemIndex();
+		if (!s_Items)
+		{
+			Print("[JEI] Item index could not be built");
+			s_Items = new array<ref JEIItemEntry>;
+		}
 		return s_Items;
 	}
 
@@ -228,7 +233,8 @@ class JEIRegistry
 	static void GetModNames(TStringArray result)
 	{
 		result.Clear();
-		foreach (JEIItemEntry entry : GetItems())
+		array<ref JEIItemEntry> items = GetItems();
+		foreach (JEIItemEntry entry : items)
 		{
 			if (entry && result.Find(entry.ModName) == -1)
 				result.Insert(entry.ModName);

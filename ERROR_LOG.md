@@ -20,3 +20,10 @@
 **Root cause:** Enforce Script has no bit shift operators.
 **Fix:** Replaced the computed color with a lookup of fixed hover colors.
 **Prevention:** No `<<` / `>>` and no ternary operator in Enforce Script; use arithmetic or lookups.
+
+## [2026-10-11 17:55] — Server crashes sending settings, client thinks crafting is disabled
+**Context:** Opening JEI after a server restart (settings and custom_recipes.json already on disk).
+**Error:** `NULL pointer to instance` in `JEI_SendSettings` on the server; client status "crafting disabled on this server".
+**Root cause:** `JsonFileLoader.JsonLoadFile(path, this)` takes an `out` parameter and replaces its target; loading into `this` can leave the singleton null. The client never received settings and fell back to a wrong status.
+**Fix:** Load into a temporary object and copy the fields; guard the send; show "loading" until settings are synced.
+**Prevention:** Never pass `this` to `JsonLoadFile`; always load into a fresh local instance.

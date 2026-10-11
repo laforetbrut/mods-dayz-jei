@@ -56,11 +56,32 @@ class JEISettings
 		if (!FileExist(JEI_PROFILE_DIR))
 			MakeDirectory(JEI_PROFILE_DIR);
 
+		// Never load into "this": the loader replaces its target and may null it.
 		if (FileExist(JEI_SETTINGS_FILE))
-			JsonFileLoader<JEISettings>.JsonLoadFile(JEI_SETTINGS_FILE, this);
+		{
+			JEISettings loaded = new JEISettings();
+			JsonFileLoader<JEISettings>.JsonLoadFile(JEI_SETTINGS_FILE, loaded);
+			if (loaded)
+				CopyFrom(loaded);
+			else
+				Print("[JEI] Cannot read " + JEI_SETTINGS_FILE + ", using defaults");
+		}
 
 		Sanitize();
 		Save();
+	}
+
+	protected void CopyFrom(JEISettings other)
+	{
+		AllowCrafting = other.AllowCrafting;
+		AllowNearbyStorage = other.AllowNearbyStorage;
+		AllowVehicleCargo = other.AllowVehicleCargo;
+		NearbyRadius = other.NearbyRadius;
+		MaxCraftBatch = other.MaxCraftBatch;
+		CraftCooldown = other.CraftCooldown;
+		BlacklistedRecipes = other.BlacklistedRecipes;
+		HiddenItems = other.HiddenItems;
+		Admins = other.Admins;
 	}
 
 	void Save()

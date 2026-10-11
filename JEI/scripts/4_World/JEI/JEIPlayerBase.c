@@ -93,10 +93,18 @@ modded class PlayerBase
 			JEIEvents.OnSettingsReceived.Invoke();
 			return;
 		}
+		JEISettings settings = JEISettings.Get();
+		JEIRecipeStore store = JEIRecipeStore.Get();
+		if (!settings || !store)
+		{
+			Print(string.Format("[JEI] Cannot send settings: settings=%1 store=%2", settings, store));
+			return;
+		}
 		ScriptRPC rpc = new ScriptRPC();
-		JEISettings.Get().WriteTo(rpc, JEI_IsAdmin());
-		JEIRecipeStore.Get().WriteTo(rpc);
+		settings.WriteTo(rpc, JEI_IsAdmin());
+		store.WriteTo(rpc);
 		rpc.Send(this, JEI_RPC_SETTINGS, true, GetIdentity());
+		Print("[JEI] Settings sent to client");
 	}
 
 	protected static void JEI_BroadcastSettings()
@@ -292,9 +300,16 @@ modded class PlayerBase
 	protected void JEI_ClientReceiveSettings(ParamsReadContext ctx)
 	{
 		if (!JEISettings.Get().ReadFrom(ctx))
+		{
+			Print("[JEI] Cannot read settings from server");
 			return;
+		}
 		if (!JEIRecipeStore.Get().ReadFrom(ctx))
+		{
+			Print("[JEI] Cannot read custom recipes from server");
 			return;
+		}
+		Print(string.Format("[JEI] Settings received: crafting=%1 radius=%2 admin=%3", JEISettings.Get().AllowCrafting, JEISettings.Get().NearbyRadius, JEISettings.Get().IsLocalAdmin));
 		JEIRegistry.MarkRecipesDirty();
 		JEIEvents.OnSettingsReceived.Invoke();
 	}
