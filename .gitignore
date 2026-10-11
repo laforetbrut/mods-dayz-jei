@@ -7,3 +7,5 @@ TEST_PROCEDURE_*.html
 *.bikey
 *.biprivatekey
 @JEI/
+test-server/
+start-test.bat
