@@ -6,6 +6,7 @@
 import hashlib
 import shutil
 import struct
+import subprocess
 import time
 from pathlib import Path
 
@@ -14,6 +15,9 @@ SOURCE = ROOT / "JEI"
 OUTPUT_DIR = ROOT / "@JEI" / "addons"
 OUTPUT = OUTPUT_DIR / "JEI.pbo"
 SKIPPED = {"$PBOPREFIX$"}
+# The private key stays outside the repository and is never published.
+PRIVATE_KEY = ROOT.parent / "keys" / "vyrriox_jei.biprivatekey"
+SIGN_TOOL = Path("J:/Steam/steamapps/common/DayZ Tools/Bin/DsUtils/DSSignFile.exe")
 
 
 def entry_header(name, size, timestamp, method=0, original=0):
@@ -43,6 +47,15 @@ def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     OUTPUT.write_bytes(bytes(body) + b"\0" + digest)
     shutil.copy2(ROOT / "mod.cpp", ROOT / "@JEI" / "mod.cpp")
+    for name in ("LICENSE", "NOTICE"):
+        shutil.copy2(ROOT / name, ROOT / "@JEI" / name)
+
+    # A rebuilt PBO invalidates its signature: sign again when the key is here.
+    for old in OUTPUT_DIR.glob("*.bisign"):
+        old.unlink()
+    if PRIVATE_KEY.exists() and SIGN_TOOL.exists():
+        subprocess.run([str(SIGN_TOOL), str(PRIVATE_KEY), str(OUTPUT)], check=True)
+        print("signed with", PRIVATE_KEY.stem)
     print(f"{OUTPUT} ({len(files)} files, {OUTPUT.stat().st_size} bytes) {time.strftime('%H:%M:%S')}")
 
 
