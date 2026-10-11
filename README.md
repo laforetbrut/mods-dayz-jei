@@ -72,6 +72,10 @@ In offline mode the local player is admin.
 - Crafting from JEI is instant (no animation).
 - Developed without a test server; please report issues on the repository.
 
+### License
+
+Apache License 2.0, see [LICENSE](LICENSE) and [NOTICE](NOTICE).
+
 ## Français
 
 Un navigateur de recettes pour DayZ inspiré du mod Minecraft JEI. Une touche, une recherche,
@@ -127,3 +131,7 @@ Voir le tableau de la section anglaise. Les recettes personnalisées sont dans
 
 - Le craft depuis JEI est instantané (sans animation).
 - Développé sans serveur de test ; merci de signaler les problèmes sur le dépôt.
+
+### Licence
+
+Apache License 2.0, voir [LICENSE](LICENSE) et [NOTICE](NOTICE).

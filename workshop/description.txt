@@ -22,7 +22,7 @@ A recipe browser for DayZ inspired by the Minecraft mod JEI. Press [b]J[/b], fin
 [*]Add Steam64 IDs to [i]Admins[/i] to give access to the admin tools. Custom recipes are saved in [i]profiles/JEI/custom_recipes.json[/i].
 [/list]
 
-Author: vyrriox
+Author: vyrriox - License: Apache 2.0
 
 [hr][/hr]
 
@@ -50,4 +50,4 @@ Un navigateur de recettes pour DayZ inspiré du mod Minecraft JEI. Appuie sur [b
 [*]Ajouter les Steam64 dans [i]Admins[/i] pour les outils admin.
 [/list]
 
-Auteur : vyrriox
+Auteur : vyrriox - Licence : Apache 2.0
