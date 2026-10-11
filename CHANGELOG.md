@@ -14,6 +14,7 @@
 - Admin tools: spawn items, create, edit, disable and delete recipes.
 - Item grid with 3D icons, tooltips, visual recipe view with cycling ingredients.
 - Sort by name, mod or class, mod filter, and a "Craftable" filter for what can be crafted now.
+- Interface translated into the 13 languages supported by DayZ.
 
 ## Français
 
@@ -29,3 +30,4 @@
 - Outils admin : faire apparaître des objets, créer, modifier, désactiver et supprimer des recettes.
 - Grille d'icônes 3D, info-bulles, recette visuelle avec ingrédients qui défilent.
 - Tri par nom, mod ou classe, filtre par mod, et filtre "Craftable" pour ce qui est fabricable tout de suite.
+- Interface traduite dans les 13 langues supportées par DayZ.
