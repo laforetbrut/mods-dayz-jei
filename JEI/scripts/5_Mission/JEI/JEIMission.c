@@ -33,7 +33,11 @@ modded class MissionGameplay
 		if (!player || !player.IsAlive() || player.IsUnconscious())
 			return;
 
-		GetGame().GetUIManager().ShowScriptedMenu(new JEIMenu(), null);
+		// ShowScriptedMenu does not call Init() on a menu created by script.
+		JEIMenu menu = new JEIMenu();
+		if (!menu.Init())
+			return;
+		GetGame().GetUIManager().ShowScriptedMenu(menu, null);
 	}
 }
 

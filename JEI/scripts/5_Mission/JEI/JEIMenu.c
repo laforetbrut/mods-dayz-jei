@@ -75,7 +75,16 @@ class JEIMenu extends UIScriptedMenu
 
 	override Widget Init()
 	{
+		// Init is called by JEI itself; never build the widgets twice.
+		if (layoutRoot)
+			return layoutRoot;
+
 		layoutRoot = GetGame().GetWorkspace().CreateWidgets("JEI/gui/layouts/jei_menu.layout");
+		if (!layoutRoot)
+		{
+			Print("[JEI] Cannot load JEI/gui/layouts/jei_menu.layout");
+			return null;
+		}
 
 		m_Search      = EditBoxWidget.Cast(layoutRoot.FindAnyWidget("Search"));
 		m_ItemList    = TextListboxWidget.Cast(layoutRoot.FindAnyWidget("ItemList"));
@@ -114,6 +123,14 @@ class JEIMenu extends UIScriptedMenu
 		m_BtnDelete       = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnDelete"));
 		m_BtnCancel       = ButtonWidget.Cast(layoutRoot.FindAnyWidget("BtnCancel"));
 
+		if (!m_Search || !m_ItemList || !m_RecipeList || !m_DetailList || !m_Editor || !m_AdminPanel || !m_Status)
+		{
+			Print("[JEI] jei_menu.layout is missing widgets");
+			layoutRoot.Unlink();
+			layoutRoot = null;
+			return null;
+		}
+
 		JEIEvents.OnCraftResult.Insert(OnCraftResult);
 		JEIEvents.OnSettingsReceived.Insert(OnSettingsReceived);
 		JEIEvents.OnAdminResult.Insert(OnAdminResult);
@@ -151,7 +168,8 @@ class JEIMenu extends UIScriptedMenu
 	override void OnHide()
 	{
 		super.OnHide();
-		s_RememberedSearch = m_Search.GetText();
+		if (m_Search)
+			s_RememberedSearch = m_Search.GetText();
 		s_RememberedClass = m_SelectedClass;
 		GetGame().GetMission().PlayerControlEnable(false);
 		GetGame().GetUIManager().ShowUICursor(false);
